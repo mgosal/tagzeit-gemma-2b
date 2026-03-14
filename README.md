@@ -11,8 +11,7 @@ Tagzeit is designed for a tiered training and evaluation hierarchy:
 | Tier | Model ID | Purpose | Backend |
 | :--- | :--- | :--- | :--- |
 | **PoC (Tiny)** | `HuggingFaceTB/SmolLM-135M` | Rapid local testing & distribution validation | PyTorch / MLX |
-| **Production** | `unsloth/gemma-2-2b-bnb-4bit` | High-fidelity temporal reasoning | Unsloth (4-bit) |
-| **Production (HF)** | `google/gemma-2-2b` | Standard Transformer compatibility | PEFT / LoRA |
+| **PoC (Tiny)** | `HuggingFaceTB/SmolLM-135M` | Rapid local testing & distribution validation | PyTorch / MLX |
 
 ```mermaid
 graph TD
@@ -25,15 +24,12 @@ graph TD
 
     subgraph "Tagzeit Tiered Architecture"
     E --> F[Tier 1: PoC 135M]
-    E --> G[Tier 2: Production 2B]
     F --> H[Architecture Validation]
-    G --> I[Arithmetic Stability]
     end
 ```
 
 **Hardware Requirement**: 
 - **PoC**: Runs on standard Mac CPU/M-series.
-- **Production**: Requires CUDA (for Unsloth) or significant M-series Unified Memory (for MLX).
 
 ---
 
@@ -97,8 +93,6 @@ Tagzeit uses a progressive training approach to move from rapid local proof-of-c
 - **Phase 1a: PoC (TINY Mode)**: Training `SmolLM-135M` on CPU or local Mac hardware. 
     - **Status**: **Phase 0 Validated**. 56,938 records generated with balanced domain distribution (~7% per domain) and validated subtraction coverage.
     - **Objective**: Stabilize the mechanical arithmetic of the [THINK] block.
-- **Phase 1b: Production (Gemma-2-2b)**: Leveraging **Unsloth** for 4-bit QLoRA training on `Gemma-2-2b`. This achieves near-full-parameter performance with significantly lower memory overhead.
-    - **Dataset**: 250k+ records generated (`train_prod.jsonl`).
 - **The [THINK] Block Methodology**: Models are trained to generate a chain-of-thought (CoT) trace that follows a deterministic state machine:
     1. Unit Isolation
     2. Overflow Check
@@ -113,7 +107,7 @@ Post-training, models are re-evaluated using the diagnostic suite to measure the
 
 - **Hardware Benchmarking**: Recording tokens per second (TPS) across MLX and PyTorch backends.
 - **Delta Analysis**: Comparing post-CPT (Continued Pre-Training) scores against the Phase 0 baseline saved in `baseline_smollm.json`.
-- **Deployment**: Resulting LoRA adapters are exported for production use with `mlx-lm` or `transformers`.
+- **Deployment**: Resulting LoRA adapters are exported for research use with `mlx-lm` or `transformers`.
 
 ---
 
@@ -132,7 +126,7 @@ Tagzeit is expanding beyond simple addition to cover more complex arithmetic and
 - `generator.js`: The synthetic data engine (Node.js).
 - `validate.py`: The diagnostic probe and hardware benchmarker (Python).
 - `cpt_train.py`: Tiered training script (supports Unsloth and standard PEFT).
-- `train_poc.jsonl` / `train_prod.jsonl`: Generated datasets.
+- `train_poc.jsonl`: Generated PoC dataset.
 - `baseline_smollm.json`: Reference scores for the 135M base model.
 
 ---
@@ -155,7 +149,6 @@ node generator.js --count 5000 --output train.jsonl
 
 # Specific scripts from package.json
 npm run generate:poc   # 50k records
-npm run generate:prod  # 250k records
 ```
 
 ### 3. Run Baseline Evaluation (Phase 0)
@@ -167,7 +160,4 @@ python validate.py --model_id HuggingFaceTB/SmolLM-135M --mode direct --output r
 ```bash
 # Local PoC
 python cpt_train.py --tiny --train_file train_poc.jsonl --eval_file eval_poc.jsonl
-
-# Production (requires GPU + Unsloth)
-python cpt_train.py --train_file train_prod.jsonl --eval_file eval_prod.jsonl
 ```
