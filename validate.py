@@ -108,6 +108,31 @@ STANDARD_MAP = {
     "18:00": "6:00 PM",
 }
 
+def load_test_cases_from_jsonl(filepath):
+    cases = []
+    with open(filepath, 'r') as f:
+        for i, line in enumerate(f):
+            if not line.strip(): continue
+            data = json.loads(line)
+            text = data.get("text", "")
+            if "[ANSWER]" in text:
+                parts = text.split("\n[THINK]")
+                if len(parts) >= 2:
+                    question = parts[0].strip()
+                    ans_match = re.search(r'\[ANSWER\] (.*?) \[\/ANSWER\]', text)
+                    if ans_match:
+                        expected = ans_match.group(1).strip()
+                        cat = "shadow_pair" if "What is" in question else "generated_temporal"
+                        cases.append({
+                            "id": f"GEN-{i:03d}",
+                            "start": "",
+                            "delta": "",
+                            "expected": expected,
+                            "category": cat,
+                            "raw_question": question
+                        })
+    return cases
+
 # ---------------------------------------------------------------------------
 # Prompt Templates
 # ---------------------------------------------------------------------------
@@ -270,7 +295,7 @@ def generate_response(model, tokenizer, engine, system_prompt, question, max_tok
 # ---------------------------------------------------------------------------
 # Main Harness
 # ---------------------------------------------------------------------------
-def run_validation(model, tokenizer, engine, mode="direct", skins=None):
+def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=None):
     """Run the full diagnostic probe."""
     if skins is None:
         skins = ["military"]
@@ -283,18 +308,24 @@ def run_validation(model, tokenizer, engine, mode="direct", skins=None):
     tps_samples = []
     category_scores = {}
 
-    for tc in TEST_CASES:
+    for tc in test_cases:
         for skin in skins:
-            # Skip non-military skins for non-semantic-eq tests
-            if skin != "military" and tc["category"] != "semantic_eq":
-                continue
-            # Skip spoken/standard if no mapping exists
-            if skin == "spoken" and tc["start"] not in SPOKEN_MAP:
-                continue
-            if skin == "standard" and tc["start"] not in STANDARD_MAP:
-                continue
+            if "raw_question" in tc:
+                if skin != skins[0]: continue
+                question = tc["raw_question"]
+                sys_prompt = SYSTEM_PROMPT if mode == "direct" else SYSTEM_PROMPT_COT
+            else:
+                # Skip non-military skins for non-semantic-eq tests
+                if skin != "military" and tc["category"] != "semantic_eq":
+                    continue
+                # Skip spoken/standard if no mapping exists
+                if skin == "spoken" and tc["start"] not in SPOKEN_MAP:
+                    continue
+                if skin == "standard" and tc["start"] not in STANDARD_MAP:
+                    continue
 
-            sys_prompt, question = build_prompt(tc, skin=skin, mode=mode)
+                sys_prompt, question = build_prompt(tc, skin=skin, mode=mode)
+                
             raw_response, tps = generate_response(model, tokenizer, engine, sys_prompt, question)
             tps_samples.append(tps)
 
@@ -377,9 +408,15 @@ def main():
     parser.add_argument("--mode", type=str, default="direct", choices=["direct", "cot", "both"])
     parser.add_argument("--skins", type=str, default="military", help="Comma-separated: military,standard,spoken")
     parser.add_argument("--output", type=str, default=None, help="Save results to JSON file")
+    parser.add_argument("--input_file", type=str, default=None, help="Path to a generated JSONL file to use instead of static TEST_CASES")
     args = parser.parse_args()
 
-    skins = [s.strip() for s in args.skins.split(",")]
+    if args.input_file:
+        test_cases = load_test_cases_from_jsonl(args.input_file)
+        skins = ["generated"]
+    else:
+        test_cases = TEST_CASES
+        skins = [s.strip() for s in args.skins.split(",")]
     model, tokenizer, engine = load_model(args.model_id, args.adapter_path, args.backend)
 
     if model is None:
@@ -393,7 +430,7 @@ def main():
         print(f"\n{'='*60}")
         print(f"Running {mode.upper()} mode baseline...")
         print(f"{'='*60}")
-        result = run_validation(model, tokenizer, engine, mode=mode, skins=skins)
+        result = run_validation(model, tokenizer, engine, test_cases, mode=mode, skins=skins)
         all_results[mode] = result
 
     if args.output:

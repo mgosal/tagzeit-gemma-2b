@@ -21,10 +21,10 @@ Tagzeit is designed for a tiered training and evaluation hierarchy:
 
 ## Phase 0: Foundation & Baseline
 
-The core of Tagzeit is a high-fidelity synthetic data engine designed to break common failure modes in LLM temporal arithmetic.
+The core of Tagzeit revolves around a script that generates formatted synthetic data to train and evaluate LLM temporal arithmetic.
 
 ### Synthetic Corpus Generation (`generator.js`)
-The generator produces a diverse dataset across **Humanity 12** domains (Domestic, Logistics, Professional, Wellness, Social, Entertainment, Parenting, Financial, Maintenance, History, Tech, Procrastination).
+The generator produces a diverse dataset across **12 everyday domains** (Domestic, Logistics, Professional, Wellness, Social, Entertainment, Parenting, Financial, Maintenance, History, Tech, Procrastination).
 
 Key Technical Features:
 - **Temporal Logic Levels**: Targets minute carries (e.g., 09:58 + 5m), hour rollovers (23:59 + 1m), and day rollovers.
@@ -58,7 +58,7 @@ Evaluation of **SmolLM-135M** (Base Model, Zero-Shot) across 43 diagnostic probe
 | **Primary Failure** | `OTHER_ERROR` | High frequency of total logic or hallucination collapses. |
 | **Format Robustness**| 0.0% | Jittered formats treated as out-of-vocabulary tokens. |
 
-**Technical Conclusion**: The single successful logic check identifies the model's latent capacity for temporal validation. This baseline confirms the necessity for the Tagzeit CPT approach to realize full temporal arithmetic capabilities. The diagnostic suite is slated for expansion to **100+ unique probe cases** in future iterations to ensure comprehensive coverage across edge conditions.
+**Technical Conclusion**: The zero-shot evaluation resulted in 0.0% Exact Match and a 2.3% Normalized Match (one successful logic check). This establishes the model's baseline level of temporal validation prior to Continuous Pre-Training (CPT). The diagnostic suite is slated for expansion to **100+ unique probe cases** in future iterations to ensure comprehensive coverage across edge conditions.
 
 ### Run 1: Proof of Training (PoT) Results
 Post-training evaluation after 1,000 iterations on a 5k sample set.
@@ -68,7 +68,17 @@ Post-training evaluation after 1,000 iterations on a 5k sample set.
 | **Structural Match**| ~85% | Model successfully learned to emit `[THINK]` and `[RESULT]` blocks. |
 | **Normalized Match**| 2.3% | Model follows the "Thinking" pattern but fails the arithmetic carry. |
 | **Training Loss** | 0.164 | Significant drop from 2.97 starting loss. |
-| **Status** | **Validated**| Architecture is sound; scaling to larger PoC dataset for stability. |
+| **Status** | **Experimental**| Model successfully learned the `[THINK]` block formatting, but failed the arithmetic. Scaling to larger PoC dataset to continue testing. |
+
+### Run 2: Generative Baseline Evaluation
+Zero-shot evaluation of **SmolLM-135M** against 500 dynamically generated temporal reasoning records (using `generator.js`) across 12 domains. Test cases included format jitter, boundary rollovers, and multi-unit cascades.
+
+| Metric | Result (Direct) | Observation |
+| :--- | :--- | :--- |
+| **Exact Match** | 0.0% | Model failed to produce a valid 24h format for any of the 469 valid temporal constraints. |
+| **Normalized Match**| 0.0% | Model exhibited zero underlying temporal calculation capacity across all domains. |
+| **Token Collapse** | 51 cases | Frequent hallucination of completely unrelated text. |
+| **Conclusion** | **Verified** | Dynamic synthesis confirms the static probe results: the base model lacks all inherent temporal reasoning capacity. |
 
 ---
 
