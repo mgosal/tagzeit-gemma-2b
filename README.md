@@ -10,25 +10,11 @@ Tagzeit is designed for a tiered training and evaluation hierarchy:
 
 | Tier | Model ID | Purpose | Backend |
 | :--- | :--- | :--- | :--- |
-| **PoC (Tiny)** | `HuggingFaceTB/SmolLM-135M` | Rapid local testing & distribution validation | PyTorch / MLX |
-| **PoC (Tiny)** | `HuggingFaceTB/SmolLM-135M` | Rapid local testing & distribution validation | PyTorch / MLX |
-
-```mermaid
-graph TD
-    subgraph "Intelligence Octane Levels"
-    A[Raw Time Math] --> B{Strategy}
-    B -- "Standard LLM (Fast/Low Octane)" --> C[Zero-Shot Failure]
-    B -- "Thinking Model (Deep/High Octane)" --> D[Correct but Higher Cost]
-    B -- "Project Tagzeit (Tuned)" --> E[Efficient 'Thinking' in Low Octane Model]
-    end
-
-    subgraph "Tagzeit Tiered Architecture"
-    E --> F[Tier 1: PoC 135M]
-    F --> H[Architecture Validation]
-    end
-```
+| **PoT (Proof of Training)** | `HuggingFaceTB/SmolLM-135M` | Initial 50-probe format & block-output validation | PyTorch / MLX |
+| **PoC (Proof of Concept)**  | `HuggingFaceTB/SmolLM-135M` | 56k-record arithmetic scaling & stability | PyTorch / MLX |
 
 **Hardware Requirement**: 
+- **Local Research**: Runs on standard Mac CPU/M-series.
 - **PoC**: Runs on standard Mac CPU/M-series.
 
 ---
