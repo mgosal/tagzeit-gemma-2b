@@ -1,0 +1,7 @@
+mlx-lm>=0.19
+transformers
+peft
+datasets
+trl
+accelerate
+torch

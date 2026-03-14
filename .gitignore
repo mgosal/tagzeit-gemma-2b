@@ -1,0 +1,20 @@
+
+# Environment
+node_modules/
+venv/
+.DS_Store
+
+# Large Datasets (JSONL)
+*.jsonl
+!eval.jsonl
+
+# Models and States
+adapters/
+lora_model/
+*.pth
+*.pt
+*.bin
+*.gguf
+
+# Local Results (Keep baseline for project context)
+# results_pot_smollm.json
