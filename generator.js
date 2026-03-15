@@ -1,13 +1,11 @@
 /**
- * Tagzeit CPT Corpus Generator v2
+ * Tagzeit CPT Corpus Generator v3
  * Generates synthetic temporal reasoning data with:
- *   - Deterministic Base-60 State Machine [THINK] blocks (verbose + compact modes)
- *   - Shadow Pairs with adjacency guarantee (contrastive learning)
- *   - Human-Fuzzy Time (Temporal Context Anchors with translation step)
- *   - Tokenization Hardening (15% spaced digits, format jitter)
- *   - Hierarchical Temporal Logic (20% multi-unit cascades)
- *   - 12 Human Domains ("Humanity 12")
- *   - MLX-compatible JSONL output
+ *   - Deterministic Linear [THINK] blocks (standardized delimiters)
+ *   - Humanized "12 Areas of Usage" (Medicine, TZ offsets, Calendar logic)
+ *   - 12h AM/PM support with case/space jitter (1% frequency)
+ *   - Semantic inversion fixes across all domains
+ *   - EOS tokenization (<|endoftext|>) for training stability
  */
 
 const fs = require('fs');
@@ -21,7 +19,7 @@ const argv = yargs(hideBin(process.argv))
   .option('output',  { type: 'string', default: 'train.jsonl' })
   .option('eval',    { type: 'string', default: 'eval.jsonl' })
   .option('compact', { type: 'boolean', default: false,
-                       describe: 'Use compact THINK blocks (for small models like SmolLM2-135M)' })
+                       describe: 'Use compact THINK blocks (for small models)' })
   .argv;
 
 const DOMAINS = [
@@ -30,9 +28,6 @@ const DOMAINS = [
   'Maintenance', 'History', 'Tech', 'Procrastination'
 ];
 
-// ---------------------------------------------------------------------------
-// Human-Fuzzy Time: Temporal Context Anchors
-// ---------------------------------------------------------------------------
 const FUZZY_TIMES = [
   { spoken: "half past six",           h: 6,  m: 30 },
   { spoken: "quarter past one",        h: 13, m: 15 },
@@ -48,236 +43,266 @@ const FUZZY_TIMES = [
   { spoken: "quarter to midnight",     h: 23, m: 45 },
 ];
 
-// ---------------------------------------------------------------------------
-// Format Jitter: Hardens tokenization by varying time representation.
-// ---------------------------------------------------------------------------
+function jitterCase(str) {
+  return str.split('').map(char => 
+    Math.random() > 0.5 ? char.toUpperCase() : char.toLowerCase()
+  ).join('');
+}
+
 function formatTime(h, m) {
   const hh = String(h).padStart(2, '0');
   const mm = String(m).padStart(2, '0');
   const standard = `${hh}:${mm}`;
-
   const rand = Math.random();
-  if (rand < 0.15) return standard.split('').join(' '); // Spaced: "1 8 : 5 9"
-  if (rand < 0.22) return `${hh}.${mm}`;                // Dot: "18.59"
-  if (rand < 0.28) {                                     // No-pad: "6:05" or "6:5"
-    const nopad_h = String(h);
-    const nopad_m = Math.random() < 0.3 ? String(m) : mm;
-    return `${nopad_h}:${nopad_m}`;
+
+  // 35% 12-hour format
+  if (rand < 0.35) {
+    const period = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    const separator = Math.random() > 0.5 ? ' ' : '';
+    const dot = Math.random() > 0.7 ? '.' : '';
+    
+    let ampm = period;
+    if (dot) ampm = period.split('').join('.');
+    
+    // Applying jitter case at only 1% frequency per user request
+    if (Math.random() < 0.01) {
+      ampm = jitterCase(ampm);
+    }
+    
+    return `${h12}:${mm}${separator}${ampm}`;
   }
-  if (rand < 0.33) return `${hh}${mm}`;                 // Clump: "1859"
+
+  // Jittered 24h formats
+  if (rand < 0.50) return standard.split('').join(' '); // Spaced
+  if (rand < 0.60) return `${hh}.${mm}`;                // Dot
+  if (rand < 0.70) return `${h}:${mm}`;                 // No-pad
+  if (rand < 0.75) return `${hh}${mm}`;                 // Clump
+  
   return standard;
 }
 
 function pad2(n) { return String(n).padStart(2, '0'); }
 
-// ---------------------------------------------------------------------------
-// VERBOSE [THINK] Block: Deterministic Base-60 State Machine (for Gemma-2-2b)
-// 4 steps: Unit Isolation → Overflow Check → Carry Primitive → Zero-Padding
-// ---------------------------------------------------------------------------
-function generateThinkBlockVerbose(startH, startM, deltaMinutes) {
+function build12hTranslation(formatTimeStr, h24, m) {
+  const canonical = `${pad2(h24)}:${pad2(m)}`;
+  const hasLetters = /[a-z]/i.test(formatTimeStr);
+  const isNoon     = /\bnoon\b/i.test(formatTimeStr);
+  const isMidnight = /\bmidnight\b/i.test(formatTimeStr);
+
+  // If it's a spoken form or 12h, we need a preamble
+  if (hasLetters || isNoon || isMidnight) {
+    const label = isNoon ? "Noon" : isMidnight ? "Midnight" : `'${formatTimeStr}'`;
+    return { preamble: `${label} = ${canonical}. `, canonicalStr: canonical };
+  }
+
+  return { preamble: '', canonicalStr: canonical };
+}
+
+function computeTimeAdd(startH, startM, deltaMinutes) {
   const totalM = startM + deltaMinutes;
   const minuteResult = ((totalM % 60) + 60) % 60;
   const hourCarry = Math.floor(totalM / 60);
   const totalH = startH + hourCarry;
   const hourResult = ((totalH % 24) + 24) % 24;
+  return { totalM, minuteResult, hourCarry, totalH, hourResult };
+}
 
-  let t = `[THINK] `;
-  t += `M_start = ${startM}. `;
-  t += `${startM} ${deltaMinutes >= 0 ? '+' : '-'} ${Math.abs(deltaMinutes)} = ${totalM}. `;
-  
+function generateThinkBlockVerbose(startH, startM, deltaMinutes, opts = {}) {
+  const { totalM, minuteResult, hourCarry, totalH, hourResult } = computeTimeAdd(startH, startM, deltaMinutes);
+  const displayTime = opts.displayTime || `${pad2(startH)}:${pad2(startM)}`;
+  const { preamble } = build12hTranslation(displayTime, startH, startM);
+
+  const absDelta = Math.abs(deltaMinutes);
+  const op       = deltaMinutes >= 0 ? '+' : '-';
+  let t = `[THINK] ${preamble}M: ${startM} ${op} ${absDelta} = ${totalM}. `;
+
   if (totalM >= 60) {
-    t += `${totalM} >= 60? Yes. ${totalM} - ${Math.floor(totalM / 60) * 60} = ${pad2(minuteResult)}. Carry ${hourCarry} to Hours. `;
+    const carriedMinutes = hourCarry * 60;
+    t += `${totalM} >= 60 → ${hourCarry} * 60 = ${carriedMinutes}, ${totalM} - ${carriedMinutes} = ${pad2(minuteResult)}. Carry +${hourCarry}h. `;
   } else if (totalM < 0) {
-    t += `${totalM} < 0? Yes. Borrow from Hours. ${totalM} + ${Math.abs(hourCarry) * 60} = ${pad2(minuteResult)}. Carry ${hourCarry} to Hours. `;
+    const borrowHours = Math.abs(hourCarry);
+    const borrowedMinutes = borrowHours * 60;
+    t += `${totalM} < 0 → borrow ${borrowHours}h. ${borrowHours} * 60 = ${borrowedMinutes}, ${totalM} + ${borrowedMinutes} = ${pad2(minuteResult)}. Carry ${hourCarry}h. `;
   } else {
-    t += `Minutes = ${pad2(minuteResult)}. `;
+    t += `No carry. Minutes = ${pad2(minuteResult)}. `;
   }
-  
-  t += `H_start = ${startH}. ${startH} ${hourCarry >= 0 ? '+' : '-'} ${Math.abs(hourCarry)} = ${totalH}. `;
-  
+
+  const hourOp = hourCarry >= 0 ? '+' : '-';
+  t += `H: ${startH} ${hourOp} ${Math.abs(hourCarry)} = ${totalH}. `;
+
   if (totalH >= 24) {
-    t += `${totalH} >= 24? Yes. ${totalH} - 24 = ${pad2(hourResult)}. Day rollover. `;
+    t += `${totalH} >= 24 → ${totalH} - 24 = ${pad2(hourResult)}. Next day. `;
   } else if (totalH < 0) {
-    t += `${totalH} < 0? Yes. ${totalH} + 24 = ${pad2(hourResult)}. Previous day. `;
+    t += `${totalH} < 0 → ${totalH} + 24 = ${pad2(hourResult)}. Previous day. `;
   } else {
     t += `Hours = ${pad2(hourResult)}. `;
   }
+
+  if (minuteResult < 10) t += `Pad minute → ${pad2(minuteResult)}. `;
+  if (hourResult < 10)   t += `Pad hour → ${pad2(hourResult)}. `;
   
-  if (minuteResult < 10) t += `Format minute: ${pad2(minuteResult)}. `;
-  if (hourResult < 10) t += `Format hour: ${pad2(hourResult)}. `;
-  t += `[RESULT] ${pad2(hourResult)}:${pad2(minuteResult)}`;
+  if (hourResult === 12 && minuteResult === 0) t += `Result is Noon. `;
+  if (hourResult === 0 && minuteResult === 0) t += `Result is Midnight. `;
+
+  t += `[/THINK]`;
   return { think: t, resultH: hourResult, resultM: minuteResult };
 }
 
-// ---------------------------------------------------------------------------
-// COMPACT [THINK] Block: For small models (SmolLM2-135M)
-// ~25 tokens instead of ~60. Arithmetic trace is explicit but compressed.
-// ---------------------------------------------------------------------------
-function generateThinkBlockCompact(startH, startM, deltaMinutes) {
-  const totalM = startM + deltaMinutes;
-  const minuteResult = ((totalM % 60) + 60) % 60;
-  const hourCarry = Math.floor(totalM / 60);
-  const totalH = startH + hourCarry;
-  const hourResult = ((totalH % 24) + 24) % 24;
+function generateThinkBlockCompact(startH, startM, deltaMinutes, opts = {}) {
+  const { totalM, minuteResult, hourCarry, totalH, hourResult } = computeTimeAdd(startH, startM, deltaMinutes);
+  const displayTime = opts.displayTime || `${pad2(startH)}:${pad2(startM)}`;
+  const { preamble } = build12hTranslation(displayTime, startH, startM);
 
-  let t = `[THINK] ${startM}${deltaMinutes >= 0 ? '+' : ''}${deltaMinutes}=${totalM}`;
+  let t = `[THINK] ${preamble}${startM}${deltaMinutes >= 0 ? '+' : ''}${deltaMinutes}=${totalM}`;
   if (totalM >= 60 || totalM < 0) {
-    t += ` mod60=${pad2(minuteResult)} carry=${hourCarry}`;
+    const carriedMinutes = Math.abs(hourCarry) * 60;
+    t += ` ${Math.abs(hourCarry)}*60=${carriedMinutes} rem=${pad2(minuteResult)} c=${hourCarry}`;
+  } else {
+    t += ` m=${pad2(minuteResult)}`;
   }
-  t += ` H:${startH}${hourCarry >= 0 ? '+' : ''}${hourCarry}=${totalH}`;
-  if (totalH >= 24 || totalH < 0) {
-    t += ` mod24=${pad2(hourResult)}`;
-  }
-  t += ` [RESULT] ${pad2(hourResult)}:${pad2(minuteResult)}`;
+
+  t += ` | ${startH}${hourCarry >= 0 ? '+' : ''}${hourCarry}=${totalH}`;
+  if (totalH >= 24) t += ` -24=${pad2(hourResult)}`;
+  else if (totalH < 0) t += ` +24=${pad2(hourResult)}`;
+  else t += ` h=${pad2(hourResult)}`;
+
+  t += ` → ${pad2(hourResult)}:${pad2(minuteResult)} [/THINK]`;
   return { think: t, resultH: hourResult, resultM: minuteResult };
 }
 
-// ---------------------------------------------------------------------------
-// Shadow Pair: base-10 arithmetic record for contrastive learning.
-// Uses the SAME numbers as the adjacent temporal record.
-// ---------------------------------------------------------------------------
 function generateShadowPair(startM, deltaMinutes) {
   const plainSum = startM + deltaMinutes;
+  const op = deltaMinutes >= 0 ? '+' : '-';
+  const absDelta = Math.abs(deltaMinutes);
   return {
-    text: `What is ${startM} + ${deltaMinutes}?\n[THINK] ${startM}+${deltaMinutes}=${plainSum}. [RESULT] ${plainSum}`
+    text: `What is ${startM} ${op} ${absDelta}?\n[THINK] ${startM}${op}${absDelta}=${plainSum} [/THINK]\n[ANSWER] ${plainSum} [/ANSWER]<|endoftext|>`
   };
 }
 
-// ---------------------------------------------------------------------------
-// Domain-specific prompt templates
-// ---------------------------------------------------------------------------
 const DOMAIN_TEMPLATES = {
-  Domestic:       (t, d) => d >= 0 ? `I put the roast in the oven at ${t}. It needs ${d} minutes. When is it done?` : `The roast was done at ${t}. It took ${Math.abs(d)} minutes. When did it go in?`,
-  Logistics:      (t, d) => d >= 0 ? `The train departs at ${t}. The journey is ${d} minutes. Arrival time?` : `The train arrived at ${t}. The journey was ${Math.abs(d)} minutes. What time did it depart?`,
-  Professional:   (t, d) => d >= 0 ? `The meeting starts at ${t} and lasts ${d} minutes. When does it end?` : `The meeting ended at ${t}. It was ${Math.abs(d)} minutes long. When did it start?`,
-  Wellness:       (t, d) => d >= 0 ? `Take your medicine at ${t}. The next dose is in ${d} minutes. When?` : `You took your medicine at ${t}. The previous dose was ${Math.abs(d)} minutes ago. What time was that?`,
-  Social:         (t, d) => d >= 0 ? `Dinner reservation is at ${t}. If I arrive ${d} minutes late, what time do I get there?` : `I arrived at the restaurant at ${t}, which was ${Math.abs(d)} minutes EARLIER than my reservation. When was the reservation?`,
-  Entertainment:  (t, d) => d >= 0 ? `The movie starts at ${t} and is ${d} minutes long. When does it end?` : `The movie ended at ${t}. It was ${Math.abs(d)} minutes long. When did it start?`,
-  Parenting:      (t, d) => d >= 0 ? `Baby fell asleep at ${t}. Nap lasts ${d} minutes. When do they wake?` : `Baby woke up at ${t} after a ${Math.abs(d)} minute nap. When did they fall asleep?`,
-  Financial:      (t, d) => d >= 0 ? `Market opens at ${t}. I will check prices in ${d} minutes. What time?` : `I checked market prices at ${t}. I was supposed to check them ${Math.abs(d)} minutes ago. What time was that?`,
-  Maintenance:    (t, d) => d >= 0 ? `The mechanic started at ${t}. Repair takes ${d} minutes. When is it done?` : `The repair was finished at ${t}. It took ${Math.abs(d)} minutes. When did the mechanic start?`,
-  History:        (t, d) => d >= 0 ? `The ceremony began at ${t} and lasted ${d} minutes. When did it end?` : `The ceremony ended at ${t}. It lasted ${Math.abs(d)} minutes. When did it begin?`,
-  Tech:           (t, d) => d >= 0 ? `Deploy started at ${t}. Pipeline takes ${d} minutes. When is it live?` : `The site was live at ${t}. Deployment took ${Math.abs(d)} minutes. When did it start?`,
-  Procrastination:(t, d) => d >= 0 ? `I said I'd start at ${t} but waited ${d} more minutes. When did I actually start?` : `I actually started at ${t} after waiting ${Math.abs(d)} minutes LESS than I planned. I planned to start at what time?`,
+  Domestic: (t, d) => d >= 0 ? `I put the roast in the oven at ${t}. It needs ${d} minutes. When is it done?` : `The roast was done at ${t}. It cooked for ${Math.abs(d)} minutes. When did it go in?`,
+  Logistics: (t, d) => d >= 0 ? `The train departs at ${t}. The journey takes ${d} minutes. What is the arrival time?` : `The train arrived at ${t}. The journey was ${Math.abs(d)} minutes. What time did it depart?`,
+  Professional: (t, d) => d >= 0 ? `The meeting starts at ${t} and lasts ${d} minutes. When does it end?` : `The meeting ended at ${t}. It lasted ${Math.abs(d)} minutes. When did it start?`,
+  Wellness: (t, d) => {
+    const abs = Math.abs(d);
+    if (d >= 0) {
+      if (abs >= 120 && abs % 60 === 0) return `Take your medication at ${t}. The next dose is every ${abs/60} hours. When is the next dose?`;
+      return `Take your medication at ${t}. The next dose is in ${d} minutes. What time is the next dose?`;
+    }
+    if (abs >= 120 && abs % 60 === 0) return `Your next dose is at ${t}. You take it every ${abs/60} hours. When was the previous dose?`;
+    return `You took your medication at ${t}. The previous dose was ${abs} minutes before that. What time was the previous dose?`;
+  },
+  Social: (t, d) => {
+    // Arrival and Reservation logic (Fixed inversion)
+    if (d >= 0) return `My dinner reservation is at ${t}. I arrived ${d} minutes late. What time did I arrive?`;
+    return `My dinner reservation is at ${t}. I arrived ${Math.abs(d)} minutes early. What time did I arrive?`;
+  },
+  Entertainment: (t, d) => d >= 0 ? `The movie starts at ${t} and runs for ${d} minutes. When does it end?` : `The movie ended at ${t}. It was ${Math.abs(d)} minutes long. When did it start?`,
+  Parenting: (t, d) => d >= 0 ? `Baby fell asleep at ${t}. The nap lasts ${d} minutes. When do they wake up?` : `Baby woke up at ${t} after a ${Math.abs(d)} minute nap. When did they fall asleep?`,
+  Financial: (t, d) => d >= 0 ? `The market opens at ${t}. I plan to check prices ${d} minutes after open. What time is that?` : `I checked the market at ${t}. The market opened ${Math.abs(d)} minutes before that. When did it open?`,
+  Maintenance: (t, d) => d >= 0 ? `The mechanic started work at ${t}. The repair takes ${d} minutes. When is it done?` : `The repair was finished at ${t}. It took ${Math.abs(d)} minutes. When did the mechanic start?`,
+  History: (t, d) => {
+    const abs = Math.abs(d);
+    if (d >= 0) {
+      if (abs > 720) return `The march began at ${t} and lasted ${d} minutes (crossing into the next day). When did it end?`;
+      return `The ceremony began at ${t} and lasted ${d} minutes. When did it end?`;
+    }
+    if (abs > 720) return `The siege ended at ${t}. It lasted ${abs} minutes, starting the previous day. When did it begin?`;
+    return `The ceremony ended at ${t}. It lasted ${abs} minutes. When did it begin?`;
+  },
+  Tech: (t, d) => {
+    const abs = Math.abs(d);
+    if (d >= 0) {
+      if (abs % 60 === 0 && abs <= 720 && Math.random() < 0.3) {
+        return `The server timestamp shows ${t} UTC. The client is UTC+${abs/60}. What time does the client see?`;
+      }
+      return `Deployment started at ${t}. The pipeline takes ${d} minutes. When does it go live?`;
+    }
+    if (abs % 60 === 0 && abs <= 720 && Math.random() < 0.3) {
+      return `The client shows ${t} local time (UTC+${abs/60}). What is the current UTC time?`;
+    }
+    return `The site went live at ${t}. Deployment took ${abs} minutes. When did deployment start?`;
+  },
+  Procrastination: (t, d) => {
+    if (d >= 0) return `I planned to start working at ${t} but procrastinated for ${d} more minutes. When did I actually start?`;
+    return `I actually started working at ${t}, which was ${Math.abs(d)} minutes after my planned start. When did I plan to start?`;
+  },
 };
 
-// ---------------------------------------------------------------------------
-// Record Generator
-// ---------------------------------------------------------------------------
-function generateRecord(domain, isCascade = false) {
-  let startH, startM, deltaMinutes;
+function generateRecord(domain, isCascade = false, hourOverride = null) {
+  let startH = hourOverride !== null ? hourOverride : faker.number.int({ min: 0, max: 23 });
+  let startM = faker.number.int({ min: 0, max: 50 });
+  let deltaMinutes;
+  
+  const roll = Math.random();
   let useFuzzy = false;
   let fuzzyEntry = null;
 
   if (isCascade) {
-    // Multi-Unit Cascade: force boundary conditions
-    startH = faker.number.int({ min: 22, max: 23 });
+    startH = Math.max(startH, 22);
     startM = faker.number.int({ min: 50, max: 59 });
     deltaMinutes = faker.number.int({ min: 1, max: 120 });
-  } else if (Math.random() < 0.10) {
-    // 10% Human-Fuzzy time
+  } else if (roll < 0.10) {
     useFuzzy = true;
     fuzzyEntry = FUZZY_TIMES[faker.number.int({ min: 0, max: FUZZY_TIMES.length - 1 })];
     startH = fuzzyEntry.h;
     startM = fuzzyEntry.m;
     deltaMinutes = faker.number.int({ min: 1, max: 120 });
-  } else if (Math.random() < 0.35) {
-    // 35% Boundary-focused (minute carry scenarios)
-    startH = faker.number.int({ min: 0, max: 23 });
+  } else if (roll < 0.45) {
     startM = faker.number.int({ min: 45, max: 59 });
     deltaMinutes = faker.number.int({ min: 1, max: 30 });
   } else {
-    // Standard random (including 20% subtraction cases)
-    startH = faker.number.int({ min: 0, max: 23 });
-    startM = faker.number.int({ min: 0, max: 59 });
-    
-    if (Math.random() < 0.20) {
-        // Subtraction
-        deltaMinutes = -faker.number.int({ min: 1, max: 180 });
-    } else {
-        deltaMinutes = faker.number.int({ min: 1, max: 180 });
-    }
+    deltaMinutes = (Math.random() < 0.2 ? -1 : 1) * faker.number.int({ min: 1, max: 180 });
   }
 
-  // Generate THINK block (compact or verbose)
   const thinkFn = argv.compact ? generateThinkBlockCompact : generateThinkBlockVerbose;
-  const { think, resultH, resultM } = thinkFn(startH, startM, deltaMinutes);
-
-  // Build prompt
-  let timeStr;
-  let thinkBlock;
-
-  if (useFuzzy) {
-    // Temporal Context Anchor: first step translates fuzzy → formal
-    timeStr = fuzzyEntry.spoken;
-    const formalTime = `${pad2(startH)}:${pad2(startM)}`;
-    thinkBlock = think.replace('[THINK] ', `[THINK] '${fuzzyEntry.spoken}' = ${formalTime}. `);
-  } else {
-    timeStr = formatTime(startH, startM);
-    thinkBlock = think;
-  }
+  const timeStr = useFuzzy ? fuzzyEntry.spoken : formatTime(startH, startM);
+  const { think, resultH, resultM } = thinkFn(startH, startM, deltaMinutes, { displayTime: timeStr });
 
   const templateFn = DOMAIN_TEMPLATES[domain] || DOMAIN_TEMPLATES.Domestic;
   const prompt = templateFn(timeStr, deltaMinutes);
-  const answer = `${pad2(resultH)}:${pad2(resultM)}`;
+  const answer = (resultH === 12 && resultM === 0) ? "noon" : (resultH === 0 && resultM === 0) ? "midnight" : `${pad2(resultH)}:${pad2(resultM)}`;
 
-  // MLX-compatible format: { text: "prompt\nresponse" }
   return {
-    text: `${prompt}\n${thinkBlock}\n[ANSWER] ${answer} [/ANSWER]`,
-    // Also store structured for potential non-MLX use
+    text: `${prompt}\n${think}\n[ANSWER] ${answer} [/ANSWER]<|endoftext|>`,
     _startM: startM,
-    _deltaMinutes: deltaMinutes,
+    _deltaMinutes: deltaMinutes
   };
 }
 
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
 async function main() {
   const trainStream = fs.createWriteStream(argv.output);
   const evalStream = fs.createWriteStream(argv.eval);
   const evalThreshold = 0.05;
 
   let generated = 0;
-  let cascadeCount = 0;
-  let shadowCount = 0;
-  const cascadeTarget = Math.floor(argv.count * 0.20);
+  let hourPointer = 0;
 
   for (let i = 0; i < argv.count; i++) {
     const domain = DOMAINS[i % DOMAINS.length];
+    const hourOverride = hourPointer % 24;
+    hourPointer++;
+    
+    const isCascade = (i % 5 === 0);
+    const record = generateRecord(domain, isCascade, hourOverride);
 
-    // Deterministic cascade: every 5th record if under target
-    const isCascade = cascadeCount < cascadeTarget && (i % 5 === 0);
-    if (isCascade) cascadeCount++;
+    const stream = Math.random() < evalThreshold ? evalStream : trainStream;
 
-    // Generate the temporal record first (to get its numbers for shadow pair)
-    const record = generateRecord(domain, isCascade);
-
-    const isEval = Math.random() < evalThreshold;
-    const stream = isEval ? evalStream : trainStream;
-
-    // Shadow Pair: emit base-10 arithmetic IMMEDIATELY before every 5th temporal record
-    // Uses the SAME minute values for contrastive learning within the same attention window
     if (i % 5 === 0) {
       const shadow = generateShadowPair(record._startM, record._deltaMinutes);
       stream.write(JSON.stringify({ text: shadow.text }) + '\n');
-      shadowCount++;
     }
 
-    // Emit the temporal record (strip internal metadata)
     stream.write(JSON.stringify({ text: record.text }) + '\n');
-
     generated++;
-    if (generated % 10000 === 0) {
-      console.log(`Generated ${generated} records (${cascadeCount} cascades, ${shadowCount} shadows)...`);
-    }
+    
+    if (generated % 1000 === 0) console.log(`Generated ${generated} records...`);
   }
 
   trainStream.end();
   evalStream.end();
-
-  const mode = argv.compact ? 'COMPACT' : 'VERBOSE';
-  console.log(`Finished [${mode}]. ${generated} records, ${cascadeCount} cascades (${Math.round(cascadeCount/generated*100)}%), ${shadowCount} shadow pairs.`);
+  console.log(`Finished. ${generated} records generated.`);
 }
 
 main().catch(console.error);

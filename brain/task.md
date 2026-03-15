@@ -12,9 +12,14 @@
 - [x] Generate 500 records using `generator.js`.
 - [x] Document the Run 2 results in the `README.md` engineering log.
 
-## Phase 3: Run 3 Proof of Training (PoT)
-- [ ] Generate 5k records for PoT (`--compact` mode).
-- [ ] Modify `cpt_train.py` to directly consume the JSONL `text` field.
-- [ ] Execute `cpt_train.py --tiny` to generate the LoRA adapter.
-- [ ] Evaluate the adapter using `validate.py --mode cot`.
-- [ ] Document final Run 3 results in `README.md`.
+## Phase 3: Generator & Pipeline Hardening
+- [x] Refactor `generator.js`: Standardize delimiters and linearize math traces.
+- [x] Expand `generator.js`: Implement 12h AM/PM with case jitter.
+- [x] Expand `generator.js`: Add "Humanized" categories (Medicine, Travel, Calendars).
+- [x] Expand `generator.js`: Implement Time Zone logic (UTC offsets).
+- [x] Expand `generator.js`: Add Noon/Midnight special token reasoning.
+- [x] Patch `cpt_train.py`: Fix field-mapping, streaming/packing compatibility, and learning rate.
+- [x] Generate fresh 5k records and perform a final Opus Audit check.
+- [ ] Execute Run 3 Training (Deferred).
+- [ ] Evaluate results and document in `README.md`.
+- [x] Publish internal artifacts to GitHub in `brain/` directory.

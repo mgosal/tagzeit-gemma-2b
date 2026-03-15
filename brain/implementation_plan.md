@@ -5,17 +5,22 @@ The goal of this task is to execute **Run 3**: proving that the `SmolLM-135M` mo
 ## Proposed Changes
 
 ### 1. Data Generation
-We will use `generator.js` to create a 5,000-record dataset specifically for the PoT.
-- **Train File**: `train_pot.jsonl`
-- **Eval File**: `eval_pot.jsonl`
+We will use `generator.js` to create a 5,000-record dataset specifically for the Initial Training Run.
+- **Train File**: `train_initial_training_run.jsonl`
+- **Eval File**: `eval_initial_training_run.jsonl`
 - **Flag**: `--compact` (since `SmolLM-135M` is a small model, the compact base-60 trace is better suited for its attention window).
 
-### 2. Updating `cpt_train.py`
-The `cpt_train.py` script currently expects a JSONL with `instruction` and `response` fields. Our generator outputs a single `text` field containing the prompt and the expected CoT response.
-#### [MODIFY] `cpt_train.py`
-- Modify the `formatting_func` to just return the `text` field directly from the dataset, or map the `text` field correctly so `SFTTrainer` can consume it.
+### 2. Deep Script Audit (OpenRouter/Opus Bridge)
+Before modifying the training script, we will use the `openrouter_ask_model` tool to consult **Claude 3 Opus**.
+- We will provide it with `cpt_train.py` and a sample of `train_initial_training_run.jsonl`.
+- Goal: Get a high-fidelity audit of the `formatting_func` and `SFTTrainer` configuration to ensure compatibility with our specific JSONL `text` field and the tiny `135M` model architecture.
 
-### 3. Training Execution
+### 3. Updating `cpt_train.py`
+Based on the Opus audit, we will modify `cpt_train.py`:
+- Modify the `formatting_func` to correctly pass through the `text` field.
+- Ensure `max_seq_length` and batch sizes are optimized for the `SmolLM-135M` context window and local CPU/MPS training.
+
+### 4. Training Execution
 Run the modified `cpt_train.py` in `--tiny` mode to train `SmolLM-135M` on CPU/local hardware.
 - Monitor the training loss to ensure it is dropping.
 - Save the resulting LoRA adapter.
