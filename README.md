@@ -48,12 +48,12 @@ Before training, models are measured using a diagnostic probe to establish a per
 
 ### Engineering Log & Run History
 
-| Run | Model | Mode | Result (EM) | Observation |
-| :--- | :--- | :--- | :--- | :--- |
-| **Run 0** | SmolLM-135M | Direct | 0.0% | Base model lacks inherent temporal logic. |
-| **Run 1** | SmolLM-135M | CoT (PoT) | 2.3% | Model learned `[THINK]` format but failed carry math. |
-| **Run 2** | SmolLM-135M | Direct | 0.0% | Zero underlying capacity confirmed across 500 records. |
-| **Run 3** | SmolLM-135M | CoT (PoT) | *In Progress*| Focusing on arithmetic hardening (base-60 primitives). |
+| Run | Model | Data | Steps | Result | Observation |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | SmolLM-135M | 1,000 (v1) | 500 | Success | **Baseline**: Learned format, but 0% math. |
+| 2 | Gemma-2-2b | 5,000 (v2) | 1,000 | Success | **Generalization**: Partial reasoning, delims unstable. |
+| 3 | SmolLM-135M | 5,000 (v3) | 250 | **FAILED** | **OOM**: MPS Out-of-Memory at Step 250 (PoT). |
+| 3.1 | SmolLM-135M | 5,000 (v3) | 250 | *Planned* | **Reduced Weight**: Dialed down to 250 steps. |
 
 ---
 

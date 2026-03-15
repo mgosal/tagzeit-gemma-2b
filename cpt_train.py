@@ -82,14 +82,14 @@ def main():
 
     # ── Determine hyper-parameters ───────────────────────────────────────
     #
-    # For a 5 k dataset with batch_size=4 and grad_accum=4 the effective
-    # batch is 16 → ~312 steps/epoch.  3 full epochs ≈ 1 000 steps which
-    # is a good starting point for SmolLM-135M to learn the [THINK] format.
+    # For a 5 k dataset with batch_size=2 and grad_accum=4 the effective
+    # batch is 8 → ~625 steps/epoch.  250 steps is a good starting point 
+    # to see if the model starts to learn the [THINK] format on low memory.
     #
     # learning_rate 3e-4 is on the higher side but appropriate for a 135M
     # model that needs to acquire a new output format quickly.  The cosine
     # schedule + warmup keep it stable.
-    default_max_steps = 1000 if args.tiny else 50000
+    default_max_steps = 250 if args.tiny else 50000
     max_steps = args.max_steps if args.max_steps is not None else default_max_steps
 
     # ── Formatting function ──────────────────────────────────────────────
@@ -109,7 +109,7 @@ def main():
         save_steps=500,
 
         # ── batch / accumulation ─────────────────────────────────────
-        per_device_train_batch_size=4 if args.tiny else 2,
+        per_device_train_batch_size=2 if args.tiny else 2,
         gradient_accumulation_steps=4,
 
         # ── schedule ─────────────────────────────────────────────────
@@ -135,7 +135,7 @@ def main():
         report_to="none",
 
         # ── SFT-specific (must live in SFTConfig) ───────────────────
-        max_length=512,
+        max_length=256,
         packing=True,
         dataset_text_field="text",      # used when formatting_func is None
 
