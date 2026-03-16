@@ -2,15 +2,15 @@
   "name": "tagzeit-generator",
   "version": "1.0.0",
   "description": "Synthetic data generator for Project Tagzeit temporal reasoning",
-  "main": "generator.js",
+  "main": "src/generator.js",
   "scripts": {
-    "generate:pot":  "node generator.js --count 5000 --output train_pot.jsonl --eval eval_pot.jsonl",
-    "generate:poc":  "node generator.js --count 50000 --output train_poc.jsonl --eval eval_poc.jsonl",
-    "generate:prod": "node generator.js --count 250000 --output train_prod.jsonl --eval eval_prod.jsonl"
+    "generate:pot":  "node src/generator.js --count 5000 --output data/train/train_pot.jsonl --eval data/eval/eval_pot.jsonl",
+    "generate:poc":  "node src/generator.js --count 50000 --output data/train/train_poc.jsonl --eval data/eval/eval_poc.jsonl",
+    "generate:prod": "node src/generator.js --count 250000 --output data/train/train_prod.jsonl --eval data/eval/eval_prod.jsonl"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
-    "luxon": "^3.4.4",
-    "yargs": "^17.7.2"
+    "@faker-js/faker": "8.4.1",
+    "luxon": "3.4.4",
+    "yargs": "17.7.2"
   }
 }

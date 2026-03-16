@@ -407,7 +407,7 @@ def main():
     parser.add_argument("--backend", type=str, default="auto", choices=["auto", "mlx", "torch"])
     parser.add_argument("--mode", type=str, default="direct", choices=["direct", "cot", "both"])
     parser.add_argument("--skins", type=str, default="military", help="Comma-separated: military,standard,spoken")
-    parser.add_argument("--output", type=str, default=None, help="Save results to JSON file")
+    parser.add_argument("--output", type=str, default="results/evaluation.json", help="Save results to JSON file")
     parser.add_argument("--input_file", type=str, default=None, help="Path to a generated JSONL file to use instead of static TEST_CASES")
     args = parser.parse_args()
 
