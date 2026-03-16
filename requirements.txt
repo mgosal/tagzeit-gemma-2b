@@ -1,7 +1,7 @@
-mlx-lm>=0.19
-transformers
-peft
-datasets
-trl
-accelerate
-torch
+mlx-lm==0.19.2
+transformers==4.46.3
+peft==0.14.0
+datasets==3.2.0
+trl==0.29.0
+accelerate==1.2.1
+torch==2.5.1

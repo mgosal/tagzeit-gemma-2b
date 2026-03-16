@@ -12,7 +12,7 @@ def main():
     parser.add_argument("--tiny", action="store_true", help="Use SmolLM-135M (CPU/PoC)")
     parser.add_argument("--train_file", type=str, required=True, help="Path to training JSONL")
     parser.add_argument("--eval_file", type=str, required=True, help="Path to evaluation JSONL")
-    parser.add_argument("--output_dir", type=str, default="./tagzeit_adapter", help="Output directory")
+    parser.add_argument("--output_dir", type=str, default="./results/tagzeit_adapter", help="Output directory")
     parser.add_argument("--max_steps", type=int, default=None, help="Override maximum training steps")
     args = parser.parse_args()
 
