@@ -48,6 +48,7 @@ Detailed results and baseline scores are stored in the [`results/`](./results/) 
 
 - `src/`
   - `generator.js`: The synthetic data engine (Node.js).
+- `../../tools/`
   - `sft_train.py`: Supervised Fine-Tuning script (trl/peft).
   - `validate.py`: Diagnostic probe and hardware benchmarker.
 - `data/`
@@ -84,12 +85,12 @@ npm run generate:poc   # 50k records
 
 ```bash
 # Zero-shot baseline or post-training check
-python src/validate.py --model_id HuggingFaceTB/SmolLM-135M --mode direct --output results/baseline.json
+python ../../tools/validate.py --model_id HuggingFaceTB/SmolLM-135M --mode direct --output results/baseline.json
 ```
 
 ### 4. Supervised Fine-Tuning (SFT)
 
 ```bash
 # Local PoC (TINY mode)
-python src/sft_train.py --tiny --train_file data/train/train_poc.jsonl --eval_file data/eval/eval_poc.jsonl
+python ../../tools/sft_train.py --tiny --train_file data/train/train_poc.jsonl --eval_file data/eval/eval_poc.jsonl
 ```

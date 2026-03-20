@@ -60,7 +60,7 @@ The founding experiment. Tagzeit investigates how small language models (startin
 cd experiments/temporal-tagzeit
 pip install -r requirements.txt
 python src/generate_data.py
-python src/train.py --config config/default.yaml
+python ../../tools/sft_train.py --config config/default.yaml
 ```
 
 See the [Tagzeit README](./experiments/temporal-tagzeit/README.md) for full documentation.
