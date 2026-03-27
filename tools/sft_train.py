@@ -1,76 +1,120 @@
 import torch
 import argparse
+import sys
+import os
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import LoraConfig, get_peft_model
 from trl import SFTTrainer, SFTConfig
-import os
+
+# Add project root to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.tokenizer.domain_tokenizer import ALL_SPECIAL_TOKENS
+from src.utils.resize_embeddings import compute_geometric_init
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Tagzeit Tiered Training Script")
+    parser = argparse.ArgumentParser(description="Tagzeit Route-to-Luxon SFT Training")
     parser.add_argument("--tiny", action="store_true", help="Use SmolLM-135M (CPU/PoC)")
+    parser.add_argument("--model_id", type=str, default=None,
+                        help="Override model ID (e.g. TinyLlama/TinyLlama-1.1B-Chat-v1.0)")
     parser.add_argument("--train_file", type=str, required=True, help="Path to training JSONL")
     parser.add_argument("--eval_file", type=str, required=True, help="Path to evaluation JSONL")
     parser.add_argument("--output_dir", type=str, default="./results/tagzeit_adapter", help="Output directory")
     parser.add_argument("--max_steps", type=int, default=None, help="Override maximum training steps")
     args = parser.parse_args()
 
-    # ── Model & Tokenizer Loading ────────────────────────────────────────
-    use_unsloth = False
+    # ── Device Detection ─────────────────────────────────────────────────
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    print(f"Device: {device}")
 
-    if args.tiny:
+    # ── Model & Tokenizer Loading ────────────────────────────────────────
+    if args.model_id:
+        model_id = args.model_id
+        print(f"Using user-specified model: {model_id}")
+    elif args.tiny:
         model_id = "HuggingFaceTB/SmolLM-135M"
         print(f"Running in TINY mode (PoC) using {model_id}")
-        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float32)
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
     else:
-        try:
-            from unsloth import FastLanguageModel
+        model_id = "google/gemma-2-2b"
+        print(f"Running in PRODUCTION mode using {model_id}")
 
-            print("Running in PRODUCTION mode using Unsloth (Gemma-2-2b)")
-            model_id = "unsloth/gemma-2-2b-bnb-4bit"
-            model, tokenizer = FastLanguageModel.from_pretrained(
-                model_name=model_id,
-                max_seq_length=1024,
-                load_in_4bit=True,
-            )
-            model = FastLanguageModel.get_peft_model(
-                model,
-                r=128,
-                target_modules=[
-                    "q_proj", "k_proj", "v_proj", "o_proj",
-                    "gate_proj", "up_proj", "down_proj",
-                ],
-                lora_alpha=256,
-                lora_dropout=0,
-                bias="none",
-                use_gradient_checkpointing="unsloth",
-                random_state=3407,
-            )
-            use_unsloth = True
-        except ImportError:
-            print(
-                "Unsloth not found. Falling back to standard Transformers/PEFT "
-                "for Production."
-            )
-            model_id = "google/gemma-2-2b"
-            model = AutoModelForCausalLM.from_pretrained(
-                model_id, load_in_4bit=True, device_map="auto"
-            )
-            tokenizer = AutoTokenizer.from_pretrained(model_id)
-            peft_config = LoraConfig(
-                r=128,
-                lora_alpha=256,
-                target_modules="all-linear",
-                lora_dropout=0.05,
-                bias="none",
-                task_type="CAUSAL_LM",
-            )
-            model = get_peft_model(model, peft_config)
+    # ── Load Model & Tokenizer ───────────────────────────────────────────
+    # On MPS/CPU, use float32 (no quantisation support).
+    # On CUDA, use float16 or 4-bit if available.
+    if device == "cuda" and not args.tiny:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id, torch_dtype=torch.float16, device_map="auto"
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_id, torch_dtype=torch.float32
+        )
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
 
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    # ── Register Domain Tokens ───────────────────────────────────────────
+    # 104 typed tokens: ROUTE_*, HEAD_*, ARG_HOUR_*, ARG_MIN_*, REF_*
+    # Without this, BPE fragments them and the model can never learn
+    # the routing grammar.
+    original_vocab_size = len(tokenizer)
+    num_added = tokenizer.add_special_tokens(
+        {"additional_special_tokens": list(ALL_SPECIAL_TOKENS)}
+    )
+    model.resize_token_embeddings(len(tokenizer))
+    print(f"Registered {num_added} domain tokens "
+          f"(vocab: {original_vocab_size} → {len(tokenizer)})")
+
+    # ── Geometric Embedding Initialization ───────────────────────────────
+    # Sinusoidal init so [ARG_HOUR_13] is near [ARG_HOUR_14], etc.
+    if num_added > 0:
+        import numpy as np
+        with torch.no_grad():
+            embed_layer = model.get_input_embeddings()
+            lm_head = model.get_output_embeddings()
+            existing_embeds = embed_layer.weight[:original_vocab_size]
+            existing_mean = existing_embeds.mean(dim=0).cpu().numpy()
+            existing_std = existing_embeds.std().item()
+            d_model = embed_layer.weight.shape[1]
+
+            for token in ALL_SPECIAL_TOKENS:
+                token_id = tokenizer.convert_tokens_to_ids(token)
+                if token_id is None or token_id < original_vocab_size:
+                    continue
+                init_vec = compute_geometric_init(
+                    token, d_model, existing_mean, existing_std
+                )
+                init_tensor = torch.tensor(init_vec, dtype=torch.float32)
+                embed_layer.weight[token_id] = init_tensor
+                if lm_head is not None and lm_head.weight.shape[0] > token_id:
+                    lm_head.weight[token_id] = init_tensor
+
+        print(f"Applied geometric init for {num_added} tokens (d={d_model})")
+
+    # ── LoRA for non-tiny models ─────────────────────────────────────────
+    if not args.tiny:
+        peft_config = LoraConfig(
+            r=64,
+            lora_alpha=128,
+            target_modules="all-linear",
+            lora_dropout=0.05,
+            bias="none",
+            task_type="CAUSAL_LM",
+        )
+        model = get_peft_model(model, peft_config)
+        model.print_trainable_parameters()
+
+    # Move to device (MPS or CPU; CUDA uses device_map auto)
+    if device != "cuda":
+        model = model.to(device)
 
     # ── Dataset ──────────────────────────────────────────────────────────
     dataset = load_dataset(
@@ -83,8 +127,8 @@ def main():
     # ── Determine hyper-parameters ───────────────────────────────────────
     #
     # For a 5 k dataset with batch_size=2 and grad_accum=4 the effective
-    # batch is 8 → ~625 steps/epoch.  250 steps is a good starting point 
-    # to see if the model starts to learn the [THINK] format on low memory.
+    # batch is 8 → ~625 steps/epoch.  250 steps is a good starting point
+    # to see if the model starts to learn the [ROUTE] format on low memory.
     #
     # learning_rate 3e-4 is on the higher side but appropriate for a 135M
     # model that needs to acquire a new output format quickly.  The cosine
@@ -102,6 +146,9 @@ def main():
     # SFTConfig *is* the TrainingArguments subclass shipped by TRL.
     # All SFT-specific knobs (max_seq_length, packing, dataset_text_field,
     # formatting_func …) live here, NOT as SFTTrainer kwargs.
+    # Use adamw_torch on MPS/CPU (no 8-bit quantised optimizer support)
+    use_8bit_optim = (device == "cuda" and not args.tiny)
+
     sft_config = SFTConfig(
         # ── output / checkpointing ───────────────────────────────────
         output_dir=args.output_dir,
@@ -109,7 +156,7 @@ def main():
         save_steps=500,
 
         # ── batch / accumulation ─────────────────────────────────────
-        per_device_train_batch_size=2 if args.tiny else 2,
+        per_device_train_batch_size=2,
         gradient_accumulation_steps=4,
 
         # ── schedule ─────────────────────────────────────────────────
@@ -118,15 +165,12 @@ def main():
         learning_rate=3e-4 if args.tiny else 5e-5,
         lr_scheduler_type="cosine",
         weight_decay=0.01,
-        optim="adamw_torch" if args.tiny else "adamw_8bit",
+        optim="adamw_8bit" if use_8bit_optim else "adamw_torch",
 
         # ── precision ────────────────────────────────────────────────
-        fp16=(not args.tiny and torch.cuda.is_available()),
-        bf16=(
-            not args.tiny
-            and torch.cuda.is_available()
-            and torch.cuda.is_bf16_supported()
-        ),
+        # MPS: fp32 only. CUDA: fp16/bf16 for large models.
+        fp16=(device == "cuda" and not args.tiny),
+        bf16=False,
 
         # ── logging / eval ───────────────────────────────────────────
         logging_steps=10,
