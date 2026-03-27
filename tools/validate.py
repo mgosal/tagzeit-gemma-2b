@@ -249,7 +249,7 @@ def load_model(model_id, adapter_path=None, backend="auto"):
         import torch
         from transformers import AutoTokenizer, AutoModelForCausalLM
         print(f"Loading {model_id} via PyTorch...")
-        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float32, device_map="auto")
+        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
         tokenizer = AutoTokenizer.from_pretrained(model_id)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
