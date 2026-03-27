@@ -18,7 +18,11 @@ def main():
     parser = argparse.ArgumentParser(description="Tagzeit Route-to-Luxon SFT Training")
     parser.add_argument("--tiny", action="store_true", help="Use SmolLM-135M (CPU/PoC)")
     parser.add_argument("--model_id", type=str, default=None,
-                        help="Override model ID (e.g. TinyLlama/TinyLlama-1.1B-Chat-v1.0)")
+                        help="Override model ID (e.g. HuggingFaceTB/SmolLM2-360M-Instruct)")
+    parser.add_argument("--no_lora", action="store_true",
+                        help="Full fine-tune (no LoRA). Use for models ≤500M that fit in memory.")
+    parser.add_argument("--learning_rate", type=float, default=None,
+                        help="Override learning rate (default: 3e-4 for full FT, 5e-5 for LoRA)")
     parser.add_argument("--train_file", type=str, required=True, help="Path to training JSONL")
     parser.add_argument("--eval_file", type=str, required=True, help="Path to evaluation JSONL")
     parser.add_argument("--output_dir", type=str, default="./results/tagzeit_adapter", help="Output directory")
@@ -99,8 +103,9 @@ def main():
 
         print(f"Applied geometric init for {num_added} tokens (d={d_model})")
 
-    # ── LoRA for non-tiny models ─────────────────────────────────────────
-    if not args.tiny:
+    # ── LoRA (unless --tiny or --no_lora) ─────────────────────────────────
+    use_lora = not args.tiny and not args.no_lora
+    if use_lora:
         peft_config = LoraConfig(
             r=64,
             lora_alpha=128,
@@ -111,6 +116,10 @@ def main():
         )
         model = get_peft_model(model, peft_config)
         model.print_trainable_parameters()
+    elif args.no_lora:
+        total = sum(p.numel() for p in model.parameters())
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"Full fine-tune: {trainable:,}/{total:,} params ({100*trainable/total:.1f}%)")
 
     # Move to device (MPS or CPU; CUDA uses device_map auto)
     if device != "cuda":
@@ -162,7 +171,7 @@ def main():
         # ── schedule ─────────────────────────────────────────────────
         max_steps=max_steps,
         warmup_steps=100,
-        learning_rate=3e-4 if args.tiny else 5e-5,
+        learning_rate=args.learning_rate or (3e-4 if (args.tiny or args.no_lora) else 5e-5),
         lr_scheduler_type="cosine",
         weight_decay=0.01,
         optim="adamw_8bit" if use_8bit_optim else "adamw_torch",
