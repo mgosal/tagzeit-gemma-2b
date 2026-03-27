@@ -1,0 +1,39 @@
+# TinyLlama-1.1B Route-to-Luxon SFT Config
+# Experiment 002: Scale-up from SmolLM-135M PoC
+
+model: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+train_file: "data/train/train_routed.jsonl"
+eval_file: "data/eval/eval_routed.jsonl"
+
+# Training
+batch_size: 2
+gradient_accumulation_steps: 4
+max_steps: 500
+warmup_steps: 100
+learning_rate: 5.0e-5
+lr_scheduler_type: cosine
+weight_decay: 0.01
+optimizer: adamw_torch
+
+# Precision
+dtype: float32
+fp16: false
+bf16: false
+
+# SFT
+max_length: 256
+packing: true
+
+# LoRA
+lora_enabled: true
+lora_r: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+# Domain tokens
+domain_tokens: 104
+geometric_init: true
+
+# Reproducibility
+seed: 3407
