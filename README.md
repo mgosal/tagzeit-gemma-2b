@@ -31,59 +31,106 @@ Deficiency areas are organised into high-level categories derived from [Issue #9
 
 ```text
 llm-deficiency-index/
-├── core/                   # Shared utilities: evaluators, data loaders, base-model wrappers
-├── experiments/            # Individual deficiency studies (one per directory)
-│   ├── temporal-tagzeit/   # 🟢 Temporal reasoning — first prototype
-│   ├── arithmetic-base-n/  # 🔲 Planned
-│   └── planning-loops/     # 🔲 Planned
-├── common-docs/            # Taxonomy deep-dives, methodology notes, contribution guides
-├── tools/                  # Shared CLI scripts for training, evaluation, and reporting
-├── LICENSE
-└── README.md               # ← You are here
+├── core/                                   # Shared infrastructure
+│   ├── computation/
+│   │   └── temporal_engine.js              # Luxon-powered deterministic engine
+│   └── synthetic_data/
+│       └── generators/temporal/
+│           └── generator.js                # Route-format training data generator
+├── src/                                    # Model-facing code
+│   ├── tokenizer/
+│   │   ├── domain_tokenizer.py             # Symbolic Expression Detector (plugin arch)
+│   │   └── compilers/
+│   │       └── temporal_compiler.py        # Circadian-aware temporal compiler
+│   └── utils/
+│       └── resize_embeddings.py            # Geometric sinusoidal embedding init
+├── experiments/                            # Individual deficiency studies
+│   └── temporal-tagzeit/                   # 🟢 Original prototype (SFT/CoT approach)
+├── tests/                                  # Test suites
+│   └── test_domain_tokenizer.py            # 25 tests (detector + compiler)
+├── brain/                                  # Project documentation
+│   ├── decisions/                          # Architectural Decision Records
+│   │   └── 001-route-to-luxon.md           # Option B architecture decision
+│   ├── implementation_plan.md              # Current pipeline plan
+│   └── task.md                             # Task tracking
+├── common-docs/                            # Contribution guides
+├── tools/                                  # Shared CLI scripts (training, evaluation)
+└── README.md                               # ← You are here
 ```
 
 ### Design Principles
 
 1. **Sub-project autonomy.** Each experiment owns its README, configuration, and local tests. You can clone the repo and work inside a single experiment without touching anything else.
-2. **Shared infrastructure.** Common evaluation metrics, data-loading patterns, and training harnesses live in `core/` and `tools/`. Experiments import from these rather than reinventing them.
+2. **Shared infrastructure.** Common computation engines, data generators, and training harnesses live in `core/` and `tools/`. Experiments import from these rather than reinventing them.
 3. **Reproducibility first.** Every experiment ships with pinned dependencies, seed-controlled data generation, and versioned model checkpoints where feasible.
+4. **Architectural decisions recorded.** Major choices are documented in `brain/decisions/` using ADR format.
 
-## Active Experiments
+## Active Work: Route-to-Luxon Pipeline
 
-### [Tagzeit](./experiments/temporal-tagzeit/) — Temporal Reasoning
+The current focus is the **Route-to-Luxon** pipeline ([ADR-001](./brain/decisions/001-route-to-luxon.md)), a three-stage architecture where the LLM never performs temporal arithmetic:
 
-The founding experiment. Tagzeit investigates how small language models (starting with Gemma 2B) handle date arithmetic, relative-time expressions, and calendar-system edge cases. It includes a synthetic data generator, a LoRA fine-tuning pipeline, and a structured evaluation suite.
-
-**Quick start:**
-
-```bash
-cd experiments/temporal-tagzeit
-pip install -r requirements.txt
-python src/generate_data.py
-python ../../tools/sft_train.py --config config/default.yaml
+```
+NL Input → [Stage 1: Detector] → Typed Tokens → [Stage 2: LLM] → [ROUTE_*] → [Stage 3: Luxon] → Result
 ```
 
-See the [Tagzeit README](./experiments/temporal-tagzeit/README.md) for full documentation.
+| Stage | Component | Description |
+|-------|-----------|-------------|
+| 1 (Pre-LLM) | Symbolic Detector | Canonicalises NL time into `[HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20]` tokens |
+| 2 (LLM) | Routing Layer | Model emits `[ROUTE_TIME_ADD]` calls instead of computing answers |
+| 3 (Post-LLM) | Luxon Engine | Deterministic arithmetic via Luxon — 100% accuracy, zero BASE_10_ERROR |
+
+**Key features:**
+- Circadian rhythm defaults for AM/PM resolution (waking-hours bias)
+- Context cues ("in the morning") for high-confidence compilation
+- Geometric sinusoidal embedding init with orthogonal subspaces
+- Shadow pair training data to teach base-10 vs base-60 distinction
+
+### Quick start
+
+```bash
+# Install dependencies
+npm install
+
+# Run the Luxon engine tests
+node core/computation/temporal_engine.test.js  # 26 tests
+
+# Run the tokenizer/compiler tests
+python3 tests/test_domain_tokenizer.py         # 25 tests
+
+# Generate training data (Route-format)
+node core/synthetic_data/generators/temporal/generator.js --count 5000
+
+# Dry-run embedding resize (no ML stack needed)
+python3 -m src.utils.resize_embeddings --dry_run
+```
+
+## Original Experiment: Tagzeit
+
+The [Tagzeit experiment](./experiments/temporal-tagzeit/) was the founding prototype, using a `[THINK]` chain-of-thought approach with SmolLM-135M. It demonstrated that small models can learn temporal formatting but struggle with the underlying arithmetic — motivating the architectural shift to Route-to-Luxon.
+
+See the [Tagzeit README](./experiments/temporal-tagzeit/README.md) for the original experiment documentation.
 
 ## Contributing
 
 We welcome contributions at every level:
 
 - **New deficiency areas.** Open a discussion or comment on [Issue #9](../../issues/9) to propose a new category or specific failure mode.
-- **Experiment development.** Pick an experiment marked 🔲 Planned and open a PR with an initial scaffold following the structure in `experiments/temporal-tagzeit/`.
+- **Experiment development.** Pick an experiment marked 🔲 Planned and open a PR with an initial scaffold.
 - **Core infrastructure.** Improvements to shared evaluators, data loaders, or CLI tools benefit every experiment.
 
 Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) before submitting a pull request.
 
 ## Roadmap
 
-| Milestone | Target |
+| Milestone | Status |
 |---|---|
-| Tagzeit prototype stable on `main` | Current |
-| Monorepo structure finalised | `refactor/structure-migration` branch |
-| Second experiment scaffolded (Arithmetic or Planning) | Next |
-| Shared evaluation dashboard | Future |
-| Published taxonomy paper / report | Future |
+| Tagzeit prototype stable on `main` | ✅ Complete |
+| Route-to-Luxon pipeline implemented | ✅ Complete (v1) |
+| Opus peer review (21 issues) | ✅ Resolved |
+| Baseline measurement (vanilla Gemma-2B) | 🔲 Next |
+| End-to-end pipeline validation | 🔲 Next |
+| Second experiment scaffolded | 🔲 Future |
+| Shared evaluation dashboard | 🔲 Future |
 
 ## License
 

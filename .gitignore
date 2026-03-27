@@ -3,6 +3,11 @@
 node_modules/
 venv/
 .DS_Store
+.env
+
+# Python bytecode
+__pycache__/
+*.pyc
 
 # Large Datasets (JSONL)
 *.jsonl
