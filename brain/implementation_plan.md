@@ -1,33 +1,43 @@
-# Run 3: Proof of Training (PoT) Execution
+# Route-to-Luxon Pipeline — Implementation Plan
 
-The goal of this task is to execute **Run 3**: proving that the `SmolLM-135M` model can actually learn the temporal reasoning arithmetic (via the `[THINK]` block) by training it on a freshly generated 5k sample set.
+**Architecture:** Option B — LLM routes, Luxon computes. The model never does math.
+**ADR:** [ADR-001: Route-to-Luxon](./decisions/001-route-to-luxon.md)
 
-## Proposed Changes
+## Pipeline Overview
 
-### 1. Data Generation
-We will use `generator.js` to create a 5,000-record dataset specifically for the Initial Training Run.
-- **Train File**: `train_initial_training_run.jsonl`
-- **Eval File**: `eval_initial_training_run.jsonl`
-- **Flag**: `--compact` (since `SmolLM-135M` is a small model, the compact base-60 trace is better suited for its attention window).
+```
+NL Input → [Stage 1: Detector] → Typed Tokens → [Stage 2: LLM] → [ROUTE_*] → [Stage 3: Luxon] → Result
+```
 
-### 2. Deep Script Audit (OpenRouter/Opus Bridge)
-Before modifying the training script, we will use the `openrouter_ask_model` tool to consult **Claude 3 Opus**.
-- We will provide it with `cpt_train.py` and a sample of `train_initial_training_run.jsonl`.
-- Goal: Get a high-fidelity audit of the `formatting_func` and `SFTTrainer` configuration to ensure compatibility with our specific JSONL `text` field and the tiny `135M` model architecture.
+### Stage 1: Symbolic Expression Detector (Pre-LLM)
+- **`src/tokenizer/domain_tokenizer.py`** — Plugin architecture with confidence-gated BPE fallback.
+- **`src/tokenizer/compilers/temporal_compiler.py`** — Circadian-aware temporal detection (24h, 12h, bare hours, o'clock, fuzzy compound, durations).
+- Context cues ("in the morning") boost confidence; ambiguous fuzzy times fall to BPE.
 
-### 3. Updating `cpt_train.py`
-Based on the Opus audit, we will modify `cpt_train.py`:
-- Modify the `formatting_func` to correctly pass through the `text` field.
-- Ensure `max_seq_length` and batch sizes are optimized for the `SmolLM-135M` context window and local CPU/MPS training.
+### Stage 2: LLM Routing
+- Model is trained to emit `[ROUTE_*]` tokens only (no answer in training data).
+- Token vocabulary: 104 special tokens (HEAD, ARG_HOUR, ARG_MIN, ROUTE, REF).
+- **`src/utils/resize_embeddings.py`** — Geometric sinusoidal initialization with orthogonal subspaces.
 
-### 4. Training Execution
-Run the modified `cpt_train.py` in `--tiny` mode to train `SmolLM-135M` on CPU/local hardware.
-- Monitor the training loss to ensure it is dropping.
-- Save the resulting LoRA adapter.
+### Stage 3: Luxon Computation Engine (Post-LLM)
+- **`core/computation/temporal_engine.js`** — Deterministic arithmetic via Luxon.
+- v1 operations: `TIME_ADD`, `TIME_SUB`, `DURATION_BETWEEN`.
+- Calendar/timezone operations deferred to v2.
 
-### 4. Documentation
-Document the Run 3 results directly in the `README.md` engineering log, noting the final training loss, and evaluating the adapter using `validate.py` in `--mode cot` to see if it learned the arithmetic.
+### Training Data
+- **`core/synthetic_data/generators/temporal/generator.js`** — Route-format output, 12 domains, shadow pairs, negative examples.
 
-## Verification Plan
-### Automated Tests
-Run `validate.py` passing the trained `--adapter_path` to verify the delta against the 0.0% baseline.
+## v1 Scope
+| Feature | Status |
+|---------|--------|
+| Time arithmetic (add, sub, between) | ✅ |
+| Circadian AM/PM defaults | ✅ |
+| Bare hours, o'clock, fuzzy compound | ✅ |
+| Geometric embedding init | ✅ |
+| Calendar shifts, timezone conversion | 🔲 v2 |
+| Stage 4 (result → NL wrapping) | 🔲 v2 |
+
+## Verification
+- Python tests: 25/25 (detector + compiler)
+- JS tests: 26/26 (Luxon engine)
+- Opus peer review: 21/21 issues addressed
