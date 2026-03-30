@@ -1,0 +1,9 @@
+model_id: "HuggingFaceTB/SmolLM2-360M-Instruct"
+run_name: "004-smollm2-360m-5k"
+max_steps: 5000
+train_file: "data/train/train_routed.jsonl"
+eval_file: "data/eval/eval_routed.jsonl"
+output_dir: "experiments/route-to-luxon/weights/004-smollm2-360m-5k"
+use_lora: false
+precision: "float32"
+# Note: Actual execution parameters are enforced via the 02_run_training_5k.sh shell script.

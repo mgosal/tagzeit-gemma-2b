@@ -1,0 +1,2 @@
+{"text":"What is 50 + 72?\n[THINK] 50+72=122 [/THINK]\n[ANSWER] 122 [/ANSWER]<|endoftext|>"}
+{"text":"The ceremony began at 22:50 and lasted 72 minutes. When did it end?\n[THINK] M: 50 + 72 = 122. 122 >= 60 → 2 * 60 = 120, 122 - 120 = 02. Carry +2h. H: 22 + 2 = 24. 24 >= 24 → 24 - 24 = 00. Next day. Pad minute → 02. Pad hour → 00. [/THINK]\n[ANSWER] 00:02 [/ANSWER]<|endoftext|>"}

@@ -27,6 +27,8 @@ def main():
     parser.add_argument("--eval_file", type=str, required=True, help="Path to evaluation JSONL")
     parser.add_argument("--output_dir", type=str, default="./results/tagzeit_adapter", help="Output directory")
     parser.add_argument("--max_steps", type=int, default=None, help="Override maximum training steps")
+    parser.add_argument("--resume_from_checkpoint", type=str, default=None,
+                        help="Path to checkpoint to resume training from (or 'last')")
     args = parser.parse_args()
 
     # ── Device Detection ─────────────────────────────────────────────────
@@ -211,7 +213,14 @@ def main():
 
     # ── Train ────────────────────────────────────────────────────────────
     print("Starting training...")
-    trainer.train()
+    if args.resume_from_checkpoint:
+        checkpoint = args.resume_from_checkpoint
+        if checkpoint.lower() == "last":
+            checkpoint = True
+        print(f"Resuming from checkpoint: {checkpoint}")
+        trainer.train(resume_from_checkpoint=checkpoint)
+    else:
+        trainer.train()
 
     # ── Save ─────────────────────────────────────────────────────────────
     print(f"Training complete. Saving adapter to {args.output_dir}")

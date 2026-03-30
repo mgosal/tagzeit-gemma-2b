@@ -139,6 +139,7 @@ def load_test_cases_from_jsonl(filepath):
 SYSTEM_PROMPT = "You are a precise time calculator. Given a starting time and a duration, calculate the resulting time. Respond with ONLY the final time in HH:MM 24-hour format. Do not explain your reasoning."
 
 SYSTEM_PROMPT_COT = "You are a precise time calculator. Given a starting time and a duration, calculate the resulting time. Show your reasoning in a [THINK] block, then give the final time in HH:MM 24-hour format."
+SYSTEM_PROMPT_ROUTE = "You are a precise temporal reasoning engine. Extract the underlying temporal logic from the user prompt and express it using [ROUTE_...] tokens. Do not provide a verbal explanation, only the routing call."
 
 
 def build_prompt(test_case, skin="military", mode="direct"):
@@ -159,7 +160,10 @@ def build_prompt(test_case, skin="military", mode="direct"):
     if test_case["category"] == "impossible":
         question = f"What time is it {delta} after {start}? If the input time is invalid, respond with INVALID."
 
-    sys = SYSTEM_PROMPT if mode == "direct" else SYSTEM_PROMPT_COT
+    if mode == "route":
+        sys = SYSTEM_PROMPT_ROUTE
+    else:
+        sys = SYSTEM_PROMPT if mode == "direct" else SYSTEM_PROMPT_COT
     return sys, question
 
 
@@ -269,12 +273,12 @@ def generate_response(model, tokenizer, engine, system_prompt, question, max_tok
 
     if engine == "mlx":
         from mlx_lm import generate as mlx_generate
-        prompt = f"{system_prompt}\n\nQuestion: {question}\nAnswer:"
+        prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{question}<|im_end|>\n<|im_start|>assistant\n"
         response = mlx_generate(model, tokenizer, prompt=prompt, max_tokens=max_tokens)
         total_tokens = len(tokenizer.encode(response))
     else:
         import torch
-        prompt = f"{system_prompt}\n\nQuestion: {question}\nAnswer:"
+        prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{question}<|im_end|>\n<|im_start|>assistant\n"
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         with torch.no_grad():
             outputs = model.generate(

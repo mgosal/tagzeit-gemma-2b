@@ -127,8 +127,9 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Tagzeit prototype stable on `main` | ✅ Complete |
 | Route-to-Luxon pipeline implemented | ✅ Complete (v1) |
 | Opus peer review (21 issues) | ✅ Resolved |
+| End-to-end pipeline validation (500 steps) | ✅ Complete (Initial: 12.5%) |
+| Grammatical "Soak" (5,000 steps) | ✅ Complete (**25.0% Accuracy**) |
 | Baseline measurement (vanilla Gemma-2B) | 🔲 Next |
-| End-to-end pipeline validation | ✅ Complete (Initial: 12.5% format success) |
 | Second experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 

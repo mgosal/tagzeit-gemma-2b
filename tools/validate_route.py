@@ -133,7 +133,7 @@ def main():
         if tc["category"] == "semantic_eq" and skin != "military":
             continue
             
-        sys_prompt, question = build_prompt(tc, skin=skin, mode="direct")
+        sys_prompt, question = build_prompt(tc, skin=skin, mode="route")
         
         raw_response, tps = generate_response(model, tokenizer, engine, sys_prompt, question)
         extracted_route = extract_routing_calls(raw_response)
