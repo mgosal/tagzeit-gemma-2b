@@ -128,7 +128,7 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Route-to-Luxon pipeline implemented | ✅ Complete (v1) |
 | Opus peer review (21 issues) | ✅ Resolved |
 | Baseline measurement (vanilla Gemma-2B) | 🔲 Next |
-| End-to-end pipeline validation | 🔲 Next |
+| End-to-end pipeline validation | ✅ Complete (Initial: 12.5% format success) |
 | Second experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 

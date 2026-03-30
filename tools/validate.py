@@ -283,7 +283,7 @@ def generate_response(model, tokenizer, engine, system_prompt, question, max_tok
                 do_sample=False,
                 eos_token_id=tokenizer.eos_token_id
             )
-        response = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
+        response = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=False)
         total_tokens = outputs.shape[1] - inputs["input_ids"].shape[1]
 
     elapsed = time.time() - start_time

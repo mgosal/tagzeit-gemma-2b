@@ -4,6 +4,7 @@
 model: "HuggingFaceTB/SmolLM2-360M-Instruct"
 train_file: "data/train/train_routed.jsonl"
 eval_file: "data/eval/eval_routed.jsonl"
+output_dir: "experiments/route-to-luxon/weights/003-smollm2-360m"
 
 # Training
 batch_size: 2
