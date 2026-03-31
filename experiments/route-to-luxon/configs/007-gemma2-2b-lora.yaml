@@ -1,0 +1,15 @@
+model_id: "google/gemma-2-2b-it"
+run_name: "007-gemma2-2b-lora"
+purpose: "LoRA SFT on Route-to-Luxon data — teach Gemma to emit [ROUTE_*] tokens."
+training: true
+method: "LoRA (r=64, alpha=128, all-linear, 3.1% trainable)"
+hardware: "Google Colab T4 (16GB VRAM)"
+precision: "float16"
+max_steps: 5000
+learning_rate: 5e-5
+batch_size: "4 × 2 grad_accum = 8 effective"
+optimizer: "adamw_8bit"
+train_file: "data/train/train_routed.jsonl"
+eval_file: "data/eval/eval_routed.jsonl"
+output_dir: "experiments/route-to-luxon/weights/007-gemma2-2b-lora"
+baseline: "Exp 006 — Gemma-2B-it vanilla (52.1% Direct, 0% Route)"

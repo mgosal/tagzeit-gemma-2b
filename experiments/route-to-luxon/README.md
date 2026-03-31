@@ -21,6 +21,7 @@ The model only learns **NLU + routing**. It never does math.
 | 004 | SmolLM2-360M | 5,656 | 5,000 | 90.2% | **25.0% E2E Success** | [004](reports/004-smollm2-360m-5k.md) |
 | 005 | SmolLM2-360M | — | — (eval only) | — | **25.0% E2E** (regression ✅) | [005](reports/005-regression-model-agnostic.md) |
 | 006 | **Gemma-2B-it** | — | — (vanilla) | — | **52.1% Direct / 35.4% CoT / 0% Route** | [006](reports/006-gemma2-2b-baseline.md) |
+| 007 | **Gemma-2B-it** | 5,640 | 5,000 (LoRA) | TBD | **Pending** (Colab) | [007](reports/007-gemma2-2b-lora.md) |
 
 ### Key Findings (Exp 006)
 
