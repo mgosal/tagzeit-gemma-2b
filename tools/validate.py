@@ -291,10 +291,23 @@ def load_model(model_id, adapter_path=None, backend="auto"):
                 print(f"  Resizing embeddings: {base_model.get_input_embeddings().weight.shape[0]} → {len(tokenizer)}")
                 base_model.resize_token_embeddings(len(tokenizer))
 
-            # 5. Apply the LoRA adapter (no device_map to avoid accelerate conflict)
-            from peft import PeftModel
-            model = PeftModel.from_pretrained(base_model, model_id, device_map={"": base_model.device})
-            print(f"  ✓ LoRA adapter applied.")
+            # 5. Apply the LoRA adapter
+            from peft import PeftModel, PeftConfig
+            adapter_path_resolved = os.path.abspath(model_id)
+            # Load PeftConfig directly from the local directory
+            peft_config = PeftConfig.from_pretrained(adapter_path_resolved)
+            model = PeftModel(base_model, peft_config)
+            # Load adapter weights — handle both single and sharded safetensors
+            import safetensors.torch
+            import glob as glob_mod
+            adapter_files = sorted(glob_mod.glob(os.path.join(adapter_path_resolved, "adapter_model*.safetensors")))
+            if not adapter_files:
+                raise FileNotFoundError(f"No adapter_model*.safetensors found in {adapter_path_resolved}")
+            all_weights = {}
+            for af in adapter_files:
+                all_weights.update(safetensors.torch.load_file(af))
+            model.load_state_dict(all_weights, strict=False)
+            print(f"  ✓ LoRA adapter applied ({len(all_weights)} tensors from {len(adapter_files)} file(s)).")
         else:
             # ── Standard model or full fine-tune ──────────────────────
             model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")

@@ -40,8 +40,28 @@ This is expected at <1 epoch — the model has seen each training example fewer 
 
 | Metric | Result |
 |:-------|:-------|
-| **Route emission rate** | TBD |
-| **E2E accuracy** | TBD |
+| **Route emission rate** | **1/48 (2.1%)** ⚠️ regression |
+| **E2E accuracy** | **0/48 (0%)** |
+| **Grammar correct** | ❌ Abandoned `[ARG_*]` tokens for natural-language routing |
+| **Operation correct** | ⚠️ Uses `[ROUTE_time_after]` instead of `[ROUTE_TIME_ADD]` |
+| **Subtraction learned** | ⚠️ Starts using `[ROUTE_TIME_BEFORE]` / `[ROUTE_past_time]` |
+| **Numerical grounding** | ✅ Now extracts correct raw values (e.g. `23:59 1`) |
+
+**Failure modes at step 500:**
+1. **Natural-language routing** (47/48 cases): Model invents its own compact notation:
+   - e.g. `08:30 + 45min` → `[ROUTE_time_after] 08:30 45 minutes` (correct values, wrong format)
+   - e.g. `01:15 - 30min` → `[ROUTE_TIME_BEFORE] 01:15 30 minutes` (correct operation!)
+2. **No structured tokens**: Completely stopped using `[HEAD_TIME]`, `[ARG_HOUR_*]`, `[ARG_MIN_*]`
+3. **Format-robust tests**: Handles spaced digits (`2 3:5 5`) by stripping spaces
+
+**Interpretation:** The model is transitioning from memorized syntax to semantic understanding.
+It has **learned what routing means** (extract time, extract duration, output a structured call)
+but is expressing it in its own natural-language notation rather than our token grammar.
+This is a classic intermediate overfitting pattern — the model finds a "shortcut" representation.
+
+> **Critical observation:** The model at step 500 can correctly distinguish ADD from SUB
+> (`[ROUTE_time_after]` vs `[ROUTE_TIME_BEFORE]`), which step 250 could not do.
+> Semantic understanding is progressing even as format compliance regresses.
 
 ### Step 750 (~1.06 epochs)
 
@@ -106,7 +126,7 @@ This is expected at <1 epoch — the model has seen each training example fewer 
 | Steps | Epochs | Emission Rate | E2E Accuracy | Notes |
 |:------|:-------|:-------------|:-------------|:------|
 | 250 | 0.35 | 91.7% (44/48) | 0% | Grammar learned, numbers wrong |
-| 500 | 0.71 | TBD | TBD | |
+| 500 | 0.71 | 2.1% (1/48) | 0% | ⚠️ Regression — natural-language routing, correct values |
 | 750 | 1.06 | TBD | TBD | |
 | 1000 | 1.42 | TBD | TBD | |
 | 1250 | 1.77 | TBD | TBD | |
@@ -123,7 +143,7 @@ This is expected at <1 epoch — the model has seen each training example fewer 
 | | Exp 007 (raw text) | Exp 007b (chat template) |
 |:---|:---|:---|
 | **Step 250 emission** | Hallucinated tokens (`[ROUTE_23]`) | Clean grammar (91.7%) |
-| **Step 500 emission** | Hallucinated tokens | TBD |
+| **Step 500 emission** | Hallucinated tokens | Natural-language routing (2.1%) ⚠️ |
 | **Step 2500 emission** | Hallucinated tokens | TBD |
 | **Best E2E** | 0% (all checkpoints) | TBD |
 | **Root cause** | Training/eval format mismatch | — |
