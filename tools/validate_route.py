@@ -29,9 +29,13 @@ from tools.validate import (
 def extract_routing_calls(raw_output):
     """
     Extracts purely the [ROUTE...] tokens and subsequent tokens.
-    Regex looks for a token starting with [ROUTE_ followed by other [TOKENS].
+    Regex looks for a routing operation token ([ROUTE_TIME_ADD], etc.)
+    followed by structured argument tokens.
+    Skips [ROUTE_START] which some checkpoints hallucinate as a prefix.
     """
-    match = re.search(r'\[ROUTE_[A-Z_]+\](?:\s*\[[A-Z0-9_]+\])+', raw_output)
+    # Strip [ROUTE_START] if present — it's not part of the grammar
+    cleaned = re.sub(r'\[ROUTE_START\]\s*', '', raw_output)
+    match = re.search(r'\[ROUTE_[A-Z_]+\](?:\s*\[[A-Z0-9_]+\])+', cleaned)
     if match:
         return re.sub(r'\s+', ' ', match.group(0)).strip()
     return None

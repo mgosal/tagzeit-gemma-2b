@@ -273,8 +273,17 @@ def load_model(model_id, adapter_path=None, backend="auto"):
                 tokenizer.pad_token = tokenizer.eos_token
 
             # 3. Load the base model
+            # Determine target device — avoid device_map="auto" which conflicts
+            # with PEFT's get_balanced_memory on some accelerate versions
+            if torch.cuda.is_available():
+                device_arg = {"device_map": "auto"}
+            elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                device_arg = {"device_map": "mps"}
+            else:
+                device_arg = {"device_map": "cpu"}
+
             base_model = AutoModelForCausalLM.from_pretrained(
-                base_model_id, torch_dtype=torch.float16, device_map="auto"
+                base_model_id, torch_dtype=torch.float16, **device_arg
             )
 
             # 4. Resize embeddings if tokenizer has extra tokens (domain tokens)
@@ -282,9 +291,9 @@ def load_model(model_id, adapter_path=None, backend="auto"):
                 print(f"  Resizing embeddings: {base_model.get_input_embeddings().weight.shape[0]} → {len(tokenizer)}")
                 base_model.resize_token_embeddings(len(tokenizer))
 
-            # 5. Apply the LoRA adapter
+            # 5. Apply the LoRA adapter (no device_map to avoid accelerate conflict)
             from peft import PeftModel
-            model = PeftModel.from_pretrained(base_model, model_id)
+            model = PeftModel.from_pretrained(base_model, model_id, device_map={"": base_model.device})
             print(f"  ✓ LoRA adapter applied.")
         else:
             # ── Standard model or full fine-tune ──────────────────────
