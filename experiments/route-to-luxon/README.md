@@ -20,7 +20,14 @@ The model only learns **NLU + routing**. It never does math.
 | 003 | SmolLM2-360M | 5,656 | 500 | 89.4% | (Initial: 12.5% Success) | [003](reports/003-smollm2-360m.md) |
 | 004 | SmolLM2-360M | 5,656 | 5,000 | 90.2% | **25.0% E2E Success** | [004](reports/004-smollm2-360m-5k.md) |
 | 005 | SmolLM2-360M | — | — (eval only) | — | **25.0% E2E** (regression ✅) | [005](reports/005-regression-model-agnostic.md) |
-| 006 | **Gemma-2B-it** | — | — (vanilla) | — | **52.1% Direct** (0% Route) | [006](reports/006-gemma2-2b-baseline.md) |
+| 006 | **Gemma-2B-it** | — | — (vanilla) | — | **52.1% Direct / 35.4% CoT / 0% Route** | [006](reports/006-gemma2-2b-baseline.md) |
+
+### Key Findings (Exp 006)
+
+- **Scale buys reasoning for free.** Vanilla Gemma-2B-it (52.1%) outperforms SmolLM2-360M after 5k steps of SFT (25.0%). No training required.
+- **CoT hurts temporal math.** Chain-of-thought *degrades* Gemma from 52.1% → 35.4%, introducing BASE_10_ERROR and FORMAT_HALLUCINATION that don't exist in direct mode. This validates the Route-to-Luxon thesis: reasoning chains corrupt arithmetic.
+- **Subtraction solved at scale.** Gemma scores 100% on subtraction (direct mode). SmolLM2 scored 0% even after SFT.
+- **Route hallucination.** Vanilla Gemma spontaneously attempted `[ROUTE_*]` style output — promising for fast SFT convergence.
 
 ## Shared Infrastructure
 

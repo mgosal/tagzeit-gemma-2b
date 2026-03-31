@@ -37,7 +37,7 @@ Key questions:
 | Model | `google/gemma-2-2b-it` (2.6B params) |
 | Training | None (vanilla) |
 | Eval harness | `tools/validate.py` (48 tests, model-agnostic) |
-| Mode | Direct (zero-shot, no CoT) |
+| Mode | Direct + CoT (both evaluated) |
 | Skins | Military only |
 | Backend | auto (MLX → PyTorch fallback) |
 | Hardware | Apple M4 Pro, 24GB RAM |
