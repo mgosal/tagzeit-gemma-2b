@@ -63,25 +63,28 @@ This is a classic intermediate overfitting pattern — the model finds a "shortc
 > (`[ROUTE_time_after]` vs `[ROUTE_TIME_BEFORE]`), which step 250 could not do.
 > Semantic understanding is progressing even as format compliance regresses.
 
-### Step 750 (~1.06 epochs)
+### Steps 750–1250 (~1.06–1.77 epochs) — Plateau
 
-| Metric | Result |
-|:-------|:-------|
-| **Route emission rate** | TBD |
-| **E2E accuracy** | TBD |
+Checkpoints 750, 1000, and 1250 produce **near-identical output** to step 500.
+The model has stabilised on the natural-language routing representation.
 
-### Step 1000 (~1.42 epochs)
+| Step | Emission Rate | E2E | Pattern |
+|:-----|:-------------|:----|:--------|
+| 750 | 1/48 (2.1%) | 0% | `[ROUTE_time_after] 23:45 30 minutes` |
+| 1000 | 1/48 (2.1%) | 0% | Identical to 750 |
+| 1250 | 1/48 (2.1%) | 0% | Identical to 750 |
 
-| Metric | Result |
-|:-------|:-------|
-| **Route emission rate** | TBD |
-| **E2E accuracy** | TBD |
+**Key observations across 750–1250:**
+- ✅ Correct time extraction: `23:59`, `08:30`, `12:55` etc.
+- ✅ Correct duration extraction: `1`, `45 minutes`, `90` etc.
+- ✅ ADD/SUB distinction maintained: `[ROUTE_TIME_BEFORE]`, `[ROUTE_TIME_AGO]`, `[ROUTE_past_time]` for subtraction
+- ❌ Never uses our structured `[ARG_HOUR_*]` / `[ARG_MIN_*]` tokens
+- ❌ No reconvergence to structured grammar despite 3× more training
 
-### Step 1250 (~1.77 epochs)
-
-| Metric | Result |
-|:-------|:-------|
-| **Route emission rate** | TBD |
+> **Conclusion:** The natural-language routing is a **stable attractor**, not a transient phase.
+> The model has found a local optimum where it emits a compact function-call-like notation
+> (`[ROUTE_time_after] <time> <duration>`) that satisfies the loss function but doesn't
+> match our structured token grammar.
 | **E2E accuracy** | TBD |
 
 ### Step 1500 (~2.13 epochs)
@@ -127,9 +130,9 @@ This is a classic intermediate overfitting pattern — the model finds a "shortc
 |:------|:-------|:-------------|:-------------|:------|
 | 250 | 0.35 | 91.7% (44/48) | 0% | Grammar learned, numbers wrong |
 | 500 | 0.71 | 2.1% (1/48) | 0% | ⚠️ Regression — natural-language routing, correct values |
-| 750 | 1.06 | TBD | TBD | |
-| 1000 | 1.42 | TBD | TBD | |
-| 1250 | 1.77 | TBD | TBD | |
+| 750 | 1.06 | 2.1% (1/48) | 0% | Plateau — identical to step 500 |
+| 1000 | 1.42 | 2.1% (1/48) | 0% | Plateau — identical to step 500 |
+| 1250 | 1.77 | 2.1% (1/48) | 0% | Plateau — identical to step 500 |
 | 1500 | 2.13 | TBD | TBD | |
 | 1750 | 2.48 | TBD | TBD | |
 | 2000 | 2.84 | TBD | TBD | |
