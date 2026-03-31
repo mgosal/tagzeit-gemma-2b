@@ -252,14 +252,50 @@ def load_model(model_id, adapter_path=None, backend="auto"):
     if backend in ("torch", "auto"):
         import torch
         from transformers import AutoTokenizer, AutoModelForCausalLM
+        import os, json
         print(f"Loading {model_id} via PyTorch...")
-        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
-        if adapter_path:
+
+        # Detect if model_id is a PEFT adapter directory
+        adapter_config_path = os.path.join(model_id, "adapter_config.json")
+        is_peft_dir = os.path.isfile(adapter_config_path)
+
+        if is_peft_dir:
+            # ── LoRA adapter directory ────────────────────────────────
+            # 1. Read the base model name from adapter_config.json
+            with open(adapter_config_path) as f:
+                adapter_cfg = json.load(f)
+            base_model_id = adapter_cfg.get("base_model_name_or_path", model_id)
+            print(f"  Detected PEFT adapter. Base model: {base_model_id}")
+
+            # 2. Load tokenizer from the adapter dir (includes domain tokens)
+            tokenizer = AutoTokenizer.from_pretrained(model_id)
+            if tokenizer.pad_token is None:
+                tokenizer.pad_token = tokenizer.eos_token
+
+            # 3. Load the base model
+            base_model = AutoModelForCausalLM.from_pretrained(
+                base_model_id, torch_dtype=torch.float16, device_map="auto"
+            )
+
+            # 4. Resize embeddings if tokenizer has extra tokens (domain tokens)
+            if len(tokenizer) != base_model.get_input_embeddings().weight.shape[0]:
+                print(f"  Resizing embeddings: {base_model.get_input_embeddings().weight.shape[0]} → {len(tokenizer)}")
+                base_model.resize_token_embeddings(len(tokenizer))
+
+            # 5. Apply the LoRA adapter
             from peft import PeftModel
-            model = PeftModel.from_pretrained(model, adapter_path)
+            model = PeftModel.from_pretrained(base_model, model_id)
+            print(f"  ✓ LoRA adapter applied.")
+        else:
+            # ── Standard model or full fine-tune ──────────────────────
+            model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
+            tokenizer = AutoTokenizer.from_pretrained(model_id)
+            if tokenizer.pad_token is None:
+                tokenizer.pad_token = tokenizer.eos_token
+            if adapter_path:
+                from peft import PeftModel
+                model = PeftModel.from_pretrained(model, adapter_path)
+
         engine = "torch"
         print(f"  ✓ PyTorch loaded successfully.")
 
