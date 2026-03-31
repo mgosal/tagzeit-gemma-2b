@@ -1,0 +1,10 @@
+model_id: "HuggingFaceTB/SmolLM2-360M-Instruct"
+run_name: "005-regression-model-agnostic"
+purpose: "Regression test — re-run Exp 004 evaluation with the new model-agnostic validate.py to confirm zero side-effects."
+weights_from: "experiments/route-to-luxon/weights/004-smollm2-360m-5k"
+training: false  # No training — evaluation only
+eval_harnesses:
+  - "tools/validate.py --mode direct --skins military"
+  - "tools/validate_route.py"
+baseline_reference: "experiments/route-to-luxon/reports/004-smollm2-360m-5k.md"
+expected_e2e_accuracy: "25.0%"

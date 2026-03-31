@@ -104,6 +104,22 @@ node core/synthetic_data/generators/temporal/generator.js --count 5000
 python3 -m src.utils.resize_embeddings --dry_run
 ```
 
+### Model-agnostic evaluation
+
+The validation harness (`tools/validate.py`) auto-detects the correct prompt format for each model via `tokenizer.apply_chat_template()`. No code changes are needed when switching between models.
+
+```bash
+# SmolLM2-360M (ChatML format)
+python tools/validate.py --model_id HuggingFaceTB/SmolLM2-360M-Instruct \
+  --backend auto --mode direct --output results/baseline_smollm2_360m.json
+
+# Gemma-2B-it (Gemma format)
+python tools/validate.py --model_id google/gemma-2-2b-it \
+  --backend auto --mode direct --output results/baseline_gemma2_2b.json
+```
+
+> **Note (Gemma):** Gemma instruct models do not support a separate `system` role. The harness automatically merges the system prompt into the user message when this is detected. Results are functionally equivalent, but this difference should be noted when comparing raw prompts across models.
+
 ## Original Experiment: Tagzeit
 
 The [Tagzeit experiment](./experiments/temporal-tagzeit/) was the founding prototype, using a `[THINK]` chain-of-thought approach with SmolLM-135M. It demonstrated that small models can learn temporal formatting but struggle with the underlying arithmetic — motivating the architectural shift to Route-to-Luxon.
@@ -129,7 +145,7 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Opus peer review (21 issues) | ✅ Resolved |
 | End-to-end pipeline validation (500 steps) | ✅ Complete (Initial: 12.5%) |
 | Grammatical "Soak" (5,000 steps) | ✅ Complete (**25.0% Accuracy**) |
-| Baseline measurement (vanilla Gemma-2B) | 🔲 Next |
+| Baseline measurement (vanilla Gemma-2B) | ✅ Complete (**52.1% Direct**) |
 | Second experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 

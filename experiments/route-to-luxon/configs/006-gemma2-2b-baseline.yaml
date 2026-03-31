@@ -1,0 +1,9 @@
+model_id: "google/gemma-2-2b-it"
+run_name: "006-gemma2-2b-baseline"
+purpose: "Vanilla baseline — measure Gemma-2B-it temporal reasoning ability with zero fine-tuning."
+training: false  # Evaluation only
+eval_harnesses:
+  - "tools/validate.py --mode direct --skins military"
+  - "tools/validate_route.py"
+output: "results/baseline_gemma2_2b.json"
+comparison_against: "SmolLM2-360M-Instruct (Exp 004/005)"

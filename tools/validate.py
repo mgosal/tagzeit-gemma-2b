@@ -266,19 +266,65 @@ def load_model(model_id, adapter_path=None, backend="auto"):
     return model, tokenizer, engine
 
 
+def format_prompt(tokenizer, system_prompt, question):
+    """Build a prompt string using the tokenizer's built-in chat template.
+
+    Handles model-specific formatting automatically:
+      - SmolLM2 / ChatML models → <|im_start|>system ... <|im_start|>assistant
+      - Gemma-2B-it             → <start_of_turn>user ... <start_of_turn>model
+      - Others                  → Whatever template the tokenizer defines
+
+    Falls back to raw ChatML for base models with no chat template.
+
+    NOTE (Gemma): Gemma instruct models do not support a "system" role.
+    When this is detected, the system prompt is merged into the user message.
+    This is functionally equivalent but should be noted in experiment logs.
+    """
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user",   "content": question},
+    ]
+
+    # --- Try the tokenizer's native chat template first ---
+    if hasattr(tokenizer, "chat_template") and tokenizer.chat_template:
+        try:
+            return tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+        except Exception:
+            # Some models (e.g. Gemma) don't support a "system" role.
+            # Merge system instructions into the user message and retry.
+            merged = [
+                {"role": "user", "content": f"{system_prompt}\n\n{question}"},
+            ]
+            return tokenizer.apply_chat_template(
+                merged,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+
+    # --- Fallback: raw ChatML (for base models / older checkpoints) ---
+    return (
+        f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+        f"<|im_start|>user\n{question}<|im_end|>\n"
+        f"<|im_start|>assistant\n"
+    )
+
+
 def generate_response(model, tokenizer, engine, system_prompt, question, max_tokens=128):
     """Generate a response from the model."""
     start_time = time.time()
     total_tokens = 0
+    prompt = format_prompt(tokenizer, system_prompt, question)
 
     if engine == "mlx":
         from mlx_lm import generate as mlx_generate
-        prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{question}<|im_end|>\n<|im_start|>assistant\n"
         response = mlx_generate(model, tokenizer, prompt=prompt, max_tokens=max_tokens)
         total_tokens = len(tokenizer.encode(response))
     else:
         import torch
-        prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{question}<|im_end|>\n<|im_start|>assistant\n"
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         with torch.no_grad():
             outputs = model.generate(
