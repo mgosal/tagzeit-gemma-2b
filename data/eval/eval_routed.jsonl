@@ -1,0 +1,303 @@
+{"text":"Ceremony began at 2:16PM, lasted 65 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_16] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_05] [/ROUTE]"}
+{"text":"Movie ended at 5:26 PM. It was 11 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_26] [HEAD_DURATION] [ARG_MIN_11] [/ROUTE]"}
+{"text":"Ceremony began at 05:54, lasted 20 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Site live at 2:53PM. Deploy took 127 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_53] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_07] [/ROUTE]"}
+{"text":"Deploy started at 12:46PM. Pipeline takes 6 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_46] [HEAD_DURATION] [ARG_MIN_06] [/ROUTE]"}
+{"text":"What is 48 - 180?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Baby woke at 8:48 AM after 180 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_48] [HEAD_DURATION] [ARG_HOUR_03] [/ROUTE]"}
+{"text":"What is 37 + 43?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 14:37. It needs 43 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_37] [HEAD_DURATION] [ARG_MIN_43] [/ROUTE]"}
+{"text":"Mechanic started at ten past four. Repair takes 67 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_07] [/ROUTE]"}
+{"text":"What is 20 + 45?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Baby fell asleep at twenty past two. Nap lasts 45 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_45] [/ROUTE]"}
+{"text":"Took medication at 10:02 PM. Previous dose was 115 minutes before. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_02] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_55] [/ROUTE]"}
+{"text":"Market opens at 13:52. Check prices 12 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_12] [/ROUTE]"}
+{"text":"Meeting starts at 11:35, lasts 114 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_35] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_54] [/ROUTE]"}
+{"text":"Take medication at 00:45. Next dose in 5 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_05] [/ROUTE]"}
+{"text":"The train departs at twenty past two. Journey takes 13 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"Baby woke at 03:39 after 109 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_39] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_49] [/ROUTE]"}
+{"text":"Take medication at 20:51. Next dose in 20 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Market opens at 00:55. Check prices 12 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_12] [/ROUTE]"}
+{"text":"The train departs at 01.47. Journey takes 8 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Baby woke at 1 3 : 4 1 after 128 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_41] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Meeting starts at 16:25, lasts 118 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_25] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_58] [/ROUTE]"}
+{"text":"Took medication at 11:34 PM. Previous dose was 146 minutes before. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_34] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_26] [/ROUTE]"}
+{"text":"The roast was done at 14:44. It cooked for 49 minutes. When did it go in?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_44] [HEAD_DURATION] [ARG_MIN_49] [/ROUTE]"}
+{"text":"Meeting starts at 0 1 : 5 2, lasts 5 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_05] [/ROUTE]"}
+{"text":"Planned to start at 6:18AM, procrastinated 7 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_18] [HEAD_DURATION] [ARG_MIN_07] [/ROUTE]"}
+{"text":"Reservation at 0 3 : 1 9. Arrived 46 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_19] [HEAD_DURATION] [ARG_MIN_46] [/ROUTE]"}
+{"text":"Baby woke at 18.20 after 54 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_54] [/ROUTE]"}
+{"text":"The train departs at 8:52PM. Journey takes 20 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Reservation at 12:17 PM. Arrived 37 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_17] [HEAD_DURATION] [ARG_MIN_37] [/ROUTE]"}
+{"text":"I put the roast in at ten past four. It needs 93 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_33] [/ROUTE]"}
+{"text":"Market opens at 5:27 PM. Check prices 45 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_27] [HEAD_DURATION] [ARG_MIN_45] [/ROUTE]"}
+{"text":"The train departs at twenty past two. Journey takes 53 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_53] [/ROUTE]"}
+{"text":"Reservation at 11:49 AM. Arrived 23 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Repair done at 11:42. Took 96 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_42] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_36] [/ROUTE]"}
+{"text":"Turn to page 1523 in the manual.\n[NO_ROUTE] This is a reference, not temporal."}
+{"text":"Mechanic started at 11:54 AM. Repair takes 10 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_10] [/ROUTE]"}
+{"text":"Ceremony began at 5:51AM, lasted 2 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_02] [/ROUTE]"}
+{"text":"Mechanic started at 10:52 AM. Repair takes 3 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"What is 54 + 22?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 15:54. It needs 22 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_22] [/ROUTE]"}
+{"text":"Meeting ended at 11:50. It lasted 159 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_50] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_39] [/ROUTE]"}
+{"text":"There were 2669 people at the event. How many tables?\n[NO_ROUTE] This is a quantity question, not temporal."}
+{"text":"The package weighs 1022 grams. Too heavy to post?\n[NO_ROUTE] This is a weight question, not temporal."}
+{"text":"Mechanic started at 1:56AM. Repair takes 29 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_56] [HEAD_DURATION] [ARG_MIN_29] [/ROUTE]"}
+{"text":"The train departs at noon. Journey takes 8 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_00] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Planned to start at 1 8 : 5 5, procrastinated 21 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_21] [/ROUTE]"}
+{"text":"Movie starts at 17:05, runs 36 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_05] [HEAD_DURATION] [ARG_MIN_36] [/ROUTE]"}
+{"text":"Repair done at 10:38 AM. Took 9 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_38] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"Planned to start at 19.19, procrastinated 103 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_19] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_43] [/ROUTE]"}
+{"text":"Mechanic started at quarter to ten. Repair takes 43 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_43] [/ROUTE]"}
+{"text":"Took medication at 6:34 AM. Previous dose was 63 minutes before. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_34] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_03] [/ROUTE]"}
+{"text":"Deploy started at 12:00 AM. Pipeline takes 76 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_00] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_16] [/ROUTE]"}
+{"text":"What is 19 + 20?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 3:19 AM. It needs 20 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_19] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"I put the roast in at 2:54 AM. It needs 8 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Meeting starts at 18:54, lasts 24 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Take medication at 15:13. Next dose in 157 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_13] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_37] [/ROUTE]"}
+{"text":"Deploy started at 2:54 AM. Pipeline takes 22 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_22] [/ROUTE]"}
+{"text":"Highway 5368 is closed. Which route should I take?\n[NO_ROUTE] This is a navigation question, not temporal."}
+{"text":"Mechanic started at 17:59. Repair takes 2 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_02] [/ROUTE]"}
+{"text":"Deploy started at half past six. Pipeline takes 106 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_30] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_46] [/ROUTE]"}
+{"text":"Baby woke at 13:04 after 21 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_04] [HEAD_DURATION] [ARG_MIN_21] [/ROUTE]"}
+{"text":"What is 46 + 2?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Planned to start at 23:46, procrastinated 2 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_46] [HEAD_DURATION] [ARG_MIN_02] [/ROUTE]"}
+{"text":"Reservation at 11:45 AM. Arrived 91 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_45] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_31] [/ROUTE]"}
+{"text":"What is 50 + 26?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 1 0 : 5 0. It needs 26 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_50] [HEAD_DURATION] [ARG_MIN_26] [/ROUTE]"}
+{"text":"Highway 7610 is closed. Which route should I take?\n[NO_ROUTE] This is a navigation question, not temporal."}
+{"text":"I put the roast in at 7:35 AM. It needs 66 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_35] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_06] [/ROUTE]"}
+{"text":"Deploy started at 2 3 : 5 1. Pipeline takes 10 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_10] [/ROUTE]"}
+{"text":"What is 28 - 56?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Ceremony ended at 21:28. Lasted 56 minutes. When did it begin?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_28] [HEAD_DURATION] [ARG_MIN_56] [/ROUTE]"}
+{"text":"What is 32 + 70?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Movie starts at 12:32, runs 70 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_32] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_10] [/ROUTE]"}
+{"text":"Baby fell asleep at 1:47PM. Nap lasts 2 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_02] [/ROUTE]"}
+{"text":"Planned to start at five past three, procrastinated 87 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_05] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_27] [/ROUTE]"}
+{"text":"Planned to start at 9:49 AM, procrastinated 27 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_27] [/ROUTE]"}
+{"text":"The train departs at 2:59PM. Journey takes 8 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Market opens at 03:49. Check prices 1 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]"}
+{"text":"I put the roast in at 21.57. It needs 14 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_14] [/ROUTE]"}
+{"text":"Deploy started at 9:53 PM. Pipeline takes 116 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_53] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_56] [/ROUTE]"}
+{"text":"Meeting ended at 1 1 : 4 1. It lasted 45 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_41] [HEAD_DURATION] [ARG_MIN_45] [/ROUTE]"}
+{"text":"What is 6 + 26?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Take medication at 12:06. Next dose in 26 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_06] [HEAD_DURATION] [ARG_MIN_26] [/ROUTE]"}
+{"text":"What is 5 - 95?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at 3:05. Arrived 95 minutes early. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_05] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_35] [/ROUTE]"}
+{"text":"Deploy started at 4:53. Pipeline takes 13 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_53] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"The train departs at 22:03. Journey takes 90 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_03] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_30] [/ROUTE]"}
+{"text":"Baby fell asleep at 8:09 AM. Nap lasts 8 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_09] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Take medication at 0 1 : 2 3. Next dose in 121 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_23] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_01] [/ROUTE]"}
+{"text":"Movie starts at 18:58, runs 14 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_14] [/ROUTE]"}
+{"text":"I live in room 6792 at the hotel. How many rooms are on the floor?\n[NO_ROUTE] This is not a temporal question."}
+{"text":"The train departs at 12:40AM. Journey takes 117 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_40] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_57] [/ROUTE]"}
+{"text":"Take medication at 2:55PM. Next dose in 9 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"What is 57 + 18?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 8:57 AM. It needs 18 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_18] [/ROUTE]"}
+{"text":"The flight number is BA1035. Is this a morning flight?\n[NO_ROUTE] Flight numbers are identifiers, not times."}
+{"text":"What is 3 + 121?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 8:03PM. It needs 121 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_03] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_01] [/ROUTE]"}
+{"text":"Planned to start at 5:40AM, procrastinated 110 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_40] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_50] [/ROUTE]"}
+{"text":"I put the roast in at 16.51. It needs 3 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"Take medication at 10:55. Next dose in 16 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_16] [/ROUTE]"}
+{"text":"Mechanic started at 12:49. Repair takes 1 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]"}
+{"text":"Reservation at 10:52AM. Arrived 11 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_11] [/ROUTE]"}
+{"text":"I put the roast in at 08:52. It needs 12 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_12] [/ROUTE]"}
+{"text":"The package weighs 4183 grams. Too heavy to post?\n[NO_ROUTE] This is a weight question, not temporal."}
+{"text":"Reservation at 18:54. Arrived 8 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Reservation at 3:08 PM. Arrived 49 minutes early. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_08] [HEAD_DURATION] [ARG_MIN_49] [/ROUTE]"}
+{"text":"Baby woke at 00:37 after 19 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_37] [HEAD_DURATION] [ARG_MIN_19] [/ROUTE]"}
+{"text":"Take medication at 05:49. Next dose in 10 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_10] [/ROUTE]"}
+{"text":"Take medication at 01:01. Next dose in 4 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_01] [HEAD_DURATION] [ARG_MIN_04] [/ROUTE]"}
+{"text":"Reservation at 5:17PM. Arrived 88 minutes early. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_17] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_28] [/ROUTE]"}
+{"text":"What is 47 + 51?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at 11:47. Arrived 51 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_51] [/ROUTE]"}
+{"text":"The train departs at 4:56AM. Journey takes 17 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_56] [HEAD_DURATION] [ARG_MIN_17] [/ROUTE]"}
+{"text":"What is 45 + 42?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Meeting starts at quarter to ten, lasts 42 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_42] [/ROUTE]"}
+{"text":"What is 34 + 101?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Movie starts at 1 8 : 3 4, runs 101 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_34] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_41] [/ROUTE]"}
+{"text":"Movie starts at 11:04, runs 28 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_04] [HEAD_DURATION] [ARG_MIN_28] [/ROUTE]"}
+{"text":"Mechanic started at 11:48. Repair takes 17 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_48] [HEAD_DURATION] [ARG_MIN_17] [/ROUTE]"}
+{"text":"Took medication at 8:04AM. Previous dose was 6 minutes before. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_04] [HEAD_DURATION] [ARG_MIN_06] [/ROUTE]"}
+{"text":"Baby fell asleep at 0 2 : 5 2. Nap lasts 7 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_07] [/ROUTE]"}
+{"text":"Planned to start at five to nine, procrastinated 106 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_55] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_46] [/ROUTE]"}
+{"text":"I put the roast in at 0 2 : 4 7. It needs 172 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_47] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_52] [/ROUTE]"}
+{"text":"What is 44 - 113?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Train arrived at 10:44 PM. Journey was 113 minutes. Departure time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_44] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_53] [/ROUTE]"}
+{"text":"Baby woke at 8:36 AM after 33 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_36] [HEAD_DURATION] [ARG_MIN_33] [/ROUTE]"}
+{"text":"Baby fell asleep at 10:45AM. Nap lasts 23 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Baby fell asleep at ten past four. Nap lasts 111 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_51] [/ROUTE]"}
+{"text":"Ceremony ended at 11:36AM. Lasted 74 minutes. When did it begin?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_36] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_14] [/ROUTE]"}
+{"text":"What is 45 + 115?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at quarter to midnight. Arrived 115 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_45] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_55] [/ROUTE]"}
+{"text":"Deploy started at 10:47. Pipeline takes 22 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_22] [/ROUTE]"}
+{"text":"What is 46 + 14?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Planned to start at 11.46, procrastinated 14 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_46] [HEAD_DURATION] [ARG_MIN_14] [/ROUTE]"}
+{"text":"Meeting starts at noon, lasts 79 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_00] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_19] [/ROUTE]"}
+{"text":"Ceremony began at twenty past two, lasted 31 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_31] [/ROUTE]"}
+{"text":"Reservation at 04:51. Arrived 6 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_06] [/ROUTE]"}
+{"text":"Meeting starts at 9:03 PM, lasts 152 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_03] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_32] [/ROUTE]"}
+{"text":"Turn to page 757 in the manual.\n[NO_ROUTE] This is a reference, not temporal."}
+{"text":"What is 55 + 24?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Meeting starts at 03:55, lasts 24 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Take medication at half past eleven. Next dose in 47 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_30] [HEAD_DURATION] [ARG_MIN_47] [/ROUTE]"}
+{"text":"Market opens at quarter to midnight. Check prices 59 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_59] [/ROUTE]"}
+{"text":"Meeting starts at 19.50, lasts 6 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_50] [HEAD_DURATION] [ARG_MIN_06] [/ROUTE]"}
+{"text":"Reservation at 11:50 AM. Arrived 9 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_50] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"Ceremony began at 0 8 : 5 2, lasted 28 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_28] [/ROUTE]"}
+{"text":"Baby fell asleep at ten to five. Nap lasts 36 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_50] [HEAD_DURATION] [ARG_MIN_36] [/ROUTE]"}
+{"text":"Train arrived at 7:49 PM. Journey was 119 minutes. Departure time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_49] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_59] [/ROUTE]"}
+{"text":"Repair done at 12:20. Took 118 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_20] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_58] [/ROUTE]"}
+{"text":"What is 22 + 155?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Movie starts at 6:22 AM, runs 155 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_22] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_35] [/ROUTE]"}
+{"text":"I put the roast in at half past eleven. It needs 69 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_30] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_09] [/ROUTE]"}
+{"text":"Market opens at 5:58PM. Check prices 87 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_58] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_27] [/ROUTE]"}
+{"text":"What is 41 + 172?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Ceremony began at 14:41, lasted 172 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_41] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_52] [/ROUTE]"}
+{"text":"Market opens at 02.23. Check prices 145 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_23] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_25] [/ROUTE]"}
+{"text":"What is 1 + 136?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Deploy started at 10:01 AM. Pipeline takes 136 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_01] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_16] [/ROUTE]"}
+{"text":"Planned to start at 9:00AM, procrastinated 21 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_00] [HEAD_DURATION] [ARG_MIN_21] [/ROUTE]"}
+{"text":"The train departs at 2 2 : 5 3. Journey takes 3 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_53] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"I put the roast in at 08:35. It needs 77 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_35] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_17] [/ROUTE]"}
+{"text":"Movie starts at 7:56AM, runs 142 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_56] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_22] [/ROUTE]"}
+{"text":"Reservation at 9:34AM. Arrived 131 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_34] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_11] [/ROUTE]"}
+{"text":"Movie ended at 21:32. It was 5 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_32] [HEAD_DURATION] [ARG_MIN_05] [/ROUTE]"}
+{"text":"Ceremony ended at 16:39. Lasted 30 minutes. When did it begin?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_39] [HEAD_DURATION] [ARG_MIN_30] [/ROUTE]"}
+{"text":"Reservation at 12:07PM. Arrived 87 minutes early. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_07] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_27] [/ROUTE]"}
+{"text":"Reservation at 2:57. Arrived 111 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_57] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_51] [/ROUTE]"}
+{"text":"Mechanic started at 07:14. Repair takes 106 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_14] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_46] [/ROUTE]"}
+{"text":"Take medication at 02:19. Next dose in 106 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_19] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_46] [/ROUTE]"}
+{"text":"Market opens at quarter past one. Check prices 39 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_15] [HEAD_DURATION] [ARG_MIN_39] [/ROUTE]"}
+{"text":"The train departs at 8:05AM. Journey takes 78 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_05] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_18] [/ROUTE]"}
+{"text":"Planned to start at 4:55 AM, procrastinated 19 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_19] [/ROUTE]"}
+{"text":"The package weighs 6311 grams. Too heavy to post?\n[NO_ROUTE] This is a weight question, not temporal."}
+{"text":"What is 52 + 26?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 20:52. It needs 26 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_26] [/ROUTE]"}
+{"text":"Take medication at five to nine. Next dose in 94 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_55] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_34] [/ROUTE]"}
+{"text":"Ceremony began at 16:48, lasted 20 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_48] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Started at 11:48PM, 84 minutes after planned. Planned start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_48] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_24] [/ROUTE]"}
+{"text":"I put the roast in at 12:54 AM. It needs 3 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_54] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"The train departs at 0 7 : 5 9. Journey takes 5 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_05] [/ROUTE]"}
+{"text":"What is 10 + 103?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Planned to start at ten past four, procrastinated 103 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_43] [/ROUTE]"}
+{"text":"What is 48 + 12?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Ceremony began at 05.48, lasted 12 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_48] [HEAD_DURATION] [ARG_MIN_12] [/ROUTE]"}
+{"text":"The train departs at 01:09. Journey takes 102 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_09] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_42] [/ROUTE]"}
+{"text":"Baby fell asleep at 6:49PM. Nap lasts 56 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_56] [/ROUTE]"}
+{"text":"I put the roast in at 15:58. It needs 23 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_23] [/ROUTE]"}
+{"text":"The package weighs 8394 grams. Too heavy to post?\n[NO_ROUTE] This is a weight question, not temporal."}
+{"text":"Baby woke at 13:08 after 91 minute nap. When did they sleep?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_08] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_31] [/ROUTE]"}
+{"text":"Mechanic started at 01.09. Repair takes 81 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_09] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_21] [/ROUTE]"}
+{"text":"Planned to start at 6:58PM, procrastinated 1 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]"}
+{"text":"What is 45 + 21?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"The train departs at 3:45PM. Journey takes 21 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_21] [/ROUTE]"}
+{"text":"The train departs at 0 7 : 1 0. Journey takes 79 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_19] [/ROUTE]"}
+{"text":"Meeting starts at 22:27, lasts 13 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_27] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"Planned to start at 10:59PM, procrastinated 26 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_26] [/ROUTE]"}
+{"text":"The roast was done at 21:23. It cooked for 175 minutes. When did it go in?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_23] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_55] [/ROUTE]"}
+{"text":"The train departs at 16:22. Journey takes 177 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_22] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_57] [/ROUTE]"}
+{"text":"Reservation at 11:43 PM. Arrived 144 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_43] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Take medication at quarter to ten. Next dose in 107 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_45] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_47] [/ROUTE]"}
+{"text":"Meeting starts at 18:53, lasts 27 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_53] [HEAD_DURATION] [ARG_MIN_27] [/ROUTE]"}
+{"text":"Meeting starts at 21:45, lasts 22 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_22] [/ROUTE]"}
+{"text":"Market opens at 7:56 AM. Check prices 13 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_56] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"Planned to start at 1 3 : 0 0, procrastinated 124 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_00] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_04] [/ROUTE]"}
+{"text":"The package weighs 959 grams. Too heavy to post?\n[NO_ROUTE] This is a weight question, not temporal."}
+{"text":"What is 59 + 7?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Baby fell asleep at 15:59. Nap lasts 7 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_07] [/ROUTE]"}
+{"text":"What is 49 - 85?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Started at 15:49, 85 minutes after planned. Planned start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_49] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_25] [/ROUTE]"}
+{"text":"The train departs at 17:51. Journey takes 3 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"What is 53 + 19?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Movie starts at 7:53, runs 19 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_53] [HEAD_DURATION] [ARG_MIN_19] [/ROUTE]"}
+{"text":"Baby fell asleep at 10:45AM. Nap lasts 29 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_29] [/ROUTE]"}
+{"text":"I put the roast in at 10:58 PM. It needs 12 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_22] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_12] [/ROUTE]"}
+{"text":"What is 6 + 80?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Market opens at 19:06. Check prices 80 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_06] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Ceremony began at 04.57, lasted 1 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]"}
+{"text":"Turn to page 9310 in the manual.\n[NO_ROUTE] This is a reference, not temporal."}
+{"text":"Baby fell asleep at 08:45. Nap lasts 25 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_25] [/ROUTE]"}
+{"text":"The train departs at 0 0 : 4 7. Journey takes 4 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_04] [/ROUTE]"}
+{"text":"What is 57 + 18?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at 1:57PM. Arrived 18 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_18] [/ROUTE]"}
+{"text":"Mechanic started at quarter to ten. Repair takes 109 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_45] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_49] [/ROUTE]"}
+{"text":"Planned to start at 23:52, procrastinated 143 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_52] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Deploy started at 19:46. Pipeline takes 21 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_46] [HEAD_DURATION] [ARG_MIN_21] [/ROUTE]"}
+{"text":"What is 58 + 30?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Meeting starts at 18:58, lasts 30 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_30] [/ROUTE]"}
+{"text":"Mechanic started at 7:20PM. Repair takes 85 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_20] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_25] [/ROUTE]"}
+{"text":"Baby fell asleep at 23:48. Nap lasts 9 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_48] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"The train departs at 08:04. Journey takes 138 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_04] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_18] [/ROUTE]"}
+{"text":"What is 38 - 149?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"The roast was done at 15:38. It cooked for 149 minutes. When did it go in?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_38] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_29] [/ROUTE]"}
+{"text":"Market opens at 14:28. Check prices 67 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_28] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_07] [/ROUTE]"}
+{"text":"What is 33 + 64?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Baby fell asleep at 04:33. Nap lasts 64 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_33] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_04] [/ROUTE]"}
+{"text":"What is 32 - 97?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at 2:32PM. Arrived 97 minutes early. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_32] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_37] [/ROUTE]"}
+{"text":"Planned to start at 0:14, procrastinated 33 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_14] [HEAD_DURATION] [ARG_MIN_33] [/ROUTE]"}
+{"text":"I put the roast in at 00.57. It needs 24 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Market opens at 0 1 : 4 9. Check prices 24 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"I put the roast in at 01:49. It needs 30 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_30] [/ROUTE]"}
+{"text":"The train departs at 8:30AM. Journey takes 140 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_08] [ARG_MIN_30] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Meeting ended at 10:06AM. It lasted 153 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_06] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_33] [/ROUTE]"}
+{"text":"What is 8 + 68?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Take medication at 12:08. Next dose in 68 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_08] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Ceremony ended at 17:44. Lasted 70 minutes. When did it begin?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_44] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_10] [/ROUTE]"}
+{"text":"Planned to start at 19:26, procrastinated 57 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_26] [HEAD_DURATION] [ARG_MIN_57] [/ROUTE]"}
+{"text":"What is 20 + 22?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Planned to start at twenty past two, procrastinated 22 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_MIN_22] [/ROUTE]"}
+{"text":"Meeting ended at 9:22 AM. It lasted 32 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_22] [HEAD_DURATION] [ARG_MIN_32] [/ROUTE]"}
+{"text":"Take medication at 02:14. Next dose in 9 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_14] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"What is 10 + 71?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Reservation at ten past four. Arrived 71 minutes late. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_10] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_11] [/ROUTE]"}
+{"text":"Mechanic started at twenty past two. Repair takes 87 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_27] [/ROUTE]"}
+{"text":"Ceremony ended at 2:14AM. Lasted 149 minutes. When did it begin?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_02] [ARG_MIN_14] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_29] [/ROUTE]"}
+{"text":"The train departs at 9:52 PM. Journey takes 24 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_21] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Meeting starts at 1:57PM, lasts 16 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_16] [/ROUTE]"}
+{"text":"Meeting starts at 20:33, lasts 176 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_20] [ARG_MIN_33] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_56] [/ROUTE]"}
+{"text":"Baby fell asleep at 11:13AM. Nap lasts 16 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_11] [ARG_MIN_13] [HEAD_DURATION] [ARG_MIN_16] [/ROUTE]"}
+{"text":"Repair done at 1:04PM. Took 77 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_04] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_17] [/ROUTE]"}
+{"text":"What is 55 + 20?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"I put the roast in at 0 9 : 5 5. It needs 20 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Repair done at 3:41 PM. Took 9 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_41] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"Site live at 23:59. Deploy took 49 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_49] [/ROUTE]"}
+{"text":"Took medication at 07:53. Previous dose was 171 minutes before. What time?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_07] [ARG_MIN_53] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_51] [/ROUTE]"}
+{"text":"Planned to start at 23:59, procrastinated 20 minutes. Actual start?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_20] [/ROUTE]"}
+{"text":"Market opens at 09:52. Check prices 5 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_05] [/ROUTE]"}
+{"text":"Take medication at 3:52PM. Next dose in 1 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_52] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]"}
+{"text":"Deploy started at 0 1 : 5 1. Pipeline takes 15 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_15] [/ROUTE]"}
+{"text":"Take medication at twenty past seven. Next dose in 106 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_19] [ARG_MIN_20] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_46] [/ROUTE]"}
+{"text":"Baby fell asleep at 14:59. Nap lasts 23 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Take medication at 17:14. Next dose in 152 minutes. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_14] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_32] [/ROUTE]"}
+{"text":"Market opens at 11:56 PM. Check prices 24 minutes later. What time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_56] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Movie starts at 3:58 AM, runs 7 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_03] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_07] [/ROUTE]"}
+{"text":"Ceremony began at 23:10, lasted 23 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_10] [HEAD_DURATION] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Ceremony began at 13:47, lasted 13 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_13] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"It cost £5516 for the ticket. How much for two?\n[NO_ROUTE] This is a financial question, not temporal."}
+{"text":"What is 11 + 18?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Mechanic started at 15:11. Repair takes 18 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_11] [HEAD_DURATION] [ARG_MIN_18] [/ROUTE]"}
+{"text":"Site live at 04:58. Deploy took 13 minutes. When did it start?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_13] [/ROUTE]"}
+{"text":"The train departs at 06.02. Journey takes 157 minutes. Arrival time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_02] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_37] [/ROUTE]"}
+{"text":"Baby fell asleep at 11:55PM. Nap lasts 29 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_55] [HEAD_DURATION] [ARG_MIN_29] [/ROUTE]"}
+{"text":"I put the roast in at twenty past two. It needs 108 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_20] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_48] [/ROUTE]"}
+{"text":"The roast was done at 06:58. It cooked for 24 minutes. When did it go in?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_58] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Meeting starts at 09:45, lasts 9 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_45] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"Baby fell asleep at midnight. Nap lasts 73 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_00] [HEAD_DURATION] [ARG_HOUR_01] [ARG_MIN_13] [/ROUTE]"}
+{"text":"Deploy started at 1 5 : 0 7. Pipeline takes 36 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_15] [ARG_MIN_07] [HEAD_DURATION] [ARG_MIN_36] [/ROUTE]"}
+{"text":"Baby fell asleep at 5:45AM. Nap lasts 143 minutes. Wake time?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_05] [ARG_MIN_45] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_23] [/ROUTE]"}
+{"text":"Checked market at 6:07 PM. It opened 133 minutes before. When?\n[ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_07] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_13] [/ROUTE]"}
+{"text":"Deploy started at 1 0 : 4 7. Pipeline takes 9 minutes. Live when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_10] [ARG_MIN_47] [HEAD_DURATION] [ARG_MIN_09] [/ROUTE]"}
+{"text":"I put the roast in at 18:13. It needs 151 minutes. When is it done?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_18] [ARG_MIN_13] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_31] [/ROUTE]"}
+{"text":"What is 51 + 14?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Mechanic started at 12:51. Repair takes 14 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_12] [ARG_MIN_51] [HEAD_DURATION] [ARG_MIN_14] [/ROUTE]"}
+{"text":"Movie starts at 5:49 PM, runs 24 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_49] [HEAD_DURATION] [ARG_MIN_24] [/ROUTE]"}
+{"text":"Mechanic started at 01:19. Repair takes 3 minutes. Done when?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_01] [ARG_MIN_19] [HEAD_DURATION] [ARG_MIN_03] [/ROUTE]"}
+{"text":"What is 43 + 8?\n[NO_ROUTE] This is base-10 arithmetic, not temporal."}
+{"text":"Ceremony began at 16:43, lasted 8 minutes. When did it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_16] [ARG_MIN_43] [HEAD_DURATION] [ARG_MIN_08] [/ROUTE]"}
+{"text":"Movie starts at 06.57, runs 31 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_06] [ARG_MIN_57] [HEAD_DURATION] [ARG_MIN_31] [/ROUTE]"}
+{"text":"Movie starts at 4:48 AM, runs 154 minutes. When does it end?\n[ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_04] [ARG_MIN_48] [HEAD_DURATION] [ARG_HOUR_02] [ARG_MIN_34] [/ROUTE]"}
