@@ -26,6 +26,9 @@ from tools.validate import (
     SYSTEM_PROMPT
 )
 
+# Must match exactly the system prompt used in training data (format_for_model.py)
+SMOLLM2_SYSTEM_PROMPT = "You are a helpful AI assistant named SmolLM, trained by Hugging Face"
+
 def extract_routing_calls(raw_output):
     """
     Extracts purely the [ROUTE...] tokens and subsequent tokens.
@@ -137,7 +140,8 @@ def main():
         if tc["category"] == "semantic_eq" and skin != "military":
             continue
             
-        sys_prompt, question = build_prompt(tc, skin=skin, mode="route")
+        _, question = build_prompt(tc, skin=skin, mode="route")
+        sys_prompt = SMOLLM2_SYSTEM_PROMPT  # Use training-matched system prompt
         
         raw_response, tps = generate_response(model, tokenizer, engine, sys_prompt, question)
         extracted_route = extract_routing_calls(raw_response)

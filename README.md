@@ -45,7 +45,11 @@ llm-deficiency-index/
 │   └── utils/
 │       └── resize_embeddings.py            # Geometric sinusoidal embedding init
 ├── experiments/                            # Individual deficiency studies
-│   └── temporal-tagzeit/                   # 🟢 Original prototype (SFT/CoT approach)
+│   ├── temporal-tagzeit/                   # Original prototype (SFT/CoT approach)
+│   └── route-to-luxon/                     # 🟢 Active — SFT routing experiments
+│       ├── reports/                        # Experiment post-mortems & analysis
+│       ├── runs/                           # Colab notebook exports
+│       └── weights/                        # Model checkpoints (gitignored)
 ├── tests/                                  # Test suites
 │   └── test_domain_tokenizer.py            # 25 tests (detector + compiler)
 ├── brain/                                  # Project documentation
@@ -55,6 +59,9 @@ llm-deficiency-index/
 │   └── task.md                             # Task tracking
 ├── common-docs/                            # Contribution guides
 ├── tools/                                  # Shared CLI scripts (training, evaluation)
+│   ├── validate.py                         # Multi-mode evaluation harness
+│   ├── validate_route.py                   # Route-to-Luxon E2E harness
+│   └── format_for_model.py                 # SFT data formatter
 └── README.md                               # ← You are here
 ```
 
@@ -136,6 +143,24 @@ We welcome contributions at every level:
 
 Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) before submitting a pull request.
 
+## Experiment History: Route-to-Luxon
+
+| Exp | Model | Method | Data | Steps | Eval Loss | E2E Accuracy | Notes |
+|-----|-------|--------|------|-------|-----------|--------------|-------|
+| 003 | SmolLM2-360M | Full FT | 5.6K | 500 | 0.326 | 12.5% | Grammar learned, direction biased |
+| 004 | SmolLM2-360M | Full FT | 5.6K | 5,000 | — | 25.0% | Grammar ossified, ADD/SUB confused |
+| 007 | Gemma-2B | LoRA | 5.6K | 1,250 | — | 0% | LoRA failed — no grammar learning |
+| 007b | Gemma-2B | LoRA+Chat | 5.6K | 1,250 | — | 0% | Natural language plateau |
+| 008a | SmolLM2-360M | Full FT | 95K | ~4,000 | — | — | VM crash, lost to ephemeral storage |
+| **008b** | SmolLM2-360M | Full FT | **95K balanced** | **10,000** | **0.267** | **2.1%** | Distribution mismatch identified |
+
+### Key Findings
+- **Full FT required** for novel token grammar; LoRA insufficient on small models
+- **Data balance** directly impacts directional accuracy (ADD vs SUB)
+- **Training-test distribution mismatch** is the primary failure mode — model learns domain-contextual routing but doesn't generalise to formulaic questions
+- **Catastrophic forgetting** measured: HellaSwag −9.6pt, ARC −13.8pt, PIQA −7.1pt vs vanilla
+- Detailed reports in [`experiments/route-to-luxon/reports/`](./experiments/route-to-luxon/reports/)
+
 ## Roadmap
 
 | Milestone | Status |
@@ -143,10 +168,13 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Tagzeit prototype stable on `main` | ✅ Complete |
 | Route-to-Luxon pipeline implemented | ✅ Complete (v1) |
 | Opus peer review (21 issues) | ✅ Resolved |
-| End-to-end pipeline validation (500 steps) | ✅ Complete (Initial: 12.5%) |
-| Grammatical "Soak" (5,000 steps) | ✅ Complete (**25.0% Accuracy**) |
-| Baseline measurement (vanilla Gemma-2B) | ✅ Complete (**52.1% Direct**) |
-| Second experiment scaffolded | 🔲 Future |
+| End-to-end pipeline validation (500 steps) | ✅ Complete (12.5%) |
+| Grammatical soak (5,000 steps) | ✅ Complete (25.0%) |
+| Baseline measurement (vanilla Gemma-2B) | ✅ Complete (52.1% Direct) |
+| 100K balanced dataset + 10K steps | ✅ Complete (Exp 008b) |
+| Standard benchmark comparison (lm-eval) | ✅ Complete |
+| Generator diversity expansion + hard negatives | 🟡 Next (Exp 009) |
+| Second deficiency experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 
 ## License
