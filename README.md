@@ -158,7 +158,9 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | 007b | Gemma-2B | LoRA+Chat | 5.6K | 1,250 | — | 0% | Natural language plateau |
 | 008a | SmolLM2-360M | Full FT | 95K | ~4,000 | — | — | VM crash, lost to ephemeral storage |
 | **008b** | SmolLM2-360M | Full FT | **95K balanced** | **10,000** | **0.267** | **2.1%** | Distribution mismatch identified |
-| **009** | **Llama 3.2-1B** | Full FT | **95K diverse** | **5,000** | — | **Pending** | Formulaic templates + hard negatives + edge cases |
+| 009a | SmolLM2-360M | Full FT | 14K v2 | 1,000 | NaN | 0% | fp16 on T4 caused weight corruption |
+| **009** | **Llama 3.2-1B** | Full FT | **5K v2** | **250** | **0.407** | **100% routing** | 6/6 operation routing at 250 steps |
+| **010** | **Llama 3.2-1B** | Full FT | **100K v2** | **5,000** | — | **Pending** | Full run with 500-step checkpoints |
 
 ### Key Findings
 - **Full FT required** for novel token grammar; LoRA insufficient on small models
@@ -180,7 +182,8 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Baseline measurement (vanilla Gemma-2B) | ✅ Complete (52.1% Direct) |
 | 100K balanced dataset + 10K steps | ✅ Complete (Exp 008b) |
 | Standard benchmark comparison (lm-eval) | ✅ Complete |
-| Generator diversity + hard negatives + Llama 1B | 🟢 Active (Exp 009) |
+| Generator diversity + hard negatives + Llama 1B | ✅ Complete (Exp 009: 100% routing) |
+| Full 5K Llama 1B training run | 🟢 Active (Exp 010) |
 | Second deficiency experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 
