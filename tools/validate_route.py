@@ -26,8 +26,9 @@ from tools.validate import (
     SYSTEM_PROMPT
 )
 
-# Must match exactly the system prompt used in training data (format_for_model.py)
-SMOLLM2_SYSTEM_PROMPT = "You are a helpful AI assistant named SmolLM, trained by Hugging Face"
+# Default system prompt for route evaluation — uses the task-specific prompt
+# from validate.py. Can be overridden via --system_prompt CLI arg.
+DEFAULT_SYSTEM_PROMPT = SYSTEM_PROMPT
 
 def extract_routing_calls(raw_output):
     """
@@ -114,6 +115,8 @@ def main():
     parser.add_argument("--model_id", type=str, required=True, help="Model ID (HuggingFace or local path)")
     parser.add_argument("--adapter_path", type=str, default=None, help="Path to LoRA adapter")
     parser.add_argument("--backend", type=str, default="auto", choices=["auto", "mlx", "torch"])
+    parser.add_argument("--system_prompt", type=str, default=None,
+                        help="System prompt for inference (defaults to SYSTEM_PROMPT from validate.py)")
     args = parser.parse_args()
 
     print("\n" + "=" * 70)
@@ -141,7 +144,7 @@ def main():
             continue
             
         _, question = build_prompt(tc, skin=skin, mode="route")
-        sys_prompt = SMOLLM2_SYSTEM_PROMPT  # Use training-matched system prompt
+        sys_prompt = args.system_prompt or DEFAULT_SYSTEM_PROMPT
         
         raw_response, tps = generate_response(model, tokenizer, engine, sys_prompt, question)
         extracted_route = extract_routing_calls(raw_response)

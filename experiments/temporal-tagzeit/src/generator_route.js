@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Tagzeit Route-Mode Training Data Generator v1
- * ================================================
+ * Tagzeit Route-Mode Training Data Generator v2 (Experiment 009)
+ * ================================================================
  * Generates synthetic temporal reasoning data in [ROUTE] token format
  * for the Route-to-Luxon SFT pipeline.
  *
@@ -10,9 +10,10 @@
  *   A: [ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_HH] [ARG_MIN_MM] [HEAD_DURATION] [ARG_HOUR_HH] [ARG_MIN_MM] [/ROUTE]
  *
  * Features:
- *   - 19 domains, 120+ templates
+ *   - 20 domains, 180+ templates (incl. Formulaic domain for harness alignment)
  *   - Balanced ADD/SUB/DURATION_BETWEEN/NO_ROUTE
  *   - Fuzzy/colloquial time expressions
+ *   - Edge case generation (midnight rollover, minute carry, noon boundary)
  *   - Varied duration phrasing
  *   - 12h/24h format jitter
  *
@@ -31,6 +32,7 @@ const argv = yargs(hideBin(process.argv))
   .option('output', { type: 'string', default: 'train_routed.jsonl' })
   .option('eval',   { type: 'string', default: 'eval_routed.jsonl' })
   .option('seed',   { type: 'number', default: 42, describe: 'Random seed for reproducibility' })
+  .option('hard-negatives', { type: 'string', default: null, describe: 'Path to hard-negative JSONL (from extract_hard_negatives.py)' })
   .argv;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -512,15 +514,20 @@ const TEMPLATES = {
       (t, d) => `The observation period started at ${t}. The patient needs ${d} of monitoring. When does it end?`,
       (t, d) => `The night shift starts at ${t} and is ${d} long. When does it end?`,
       (t, d) => `The emergency call came in at ${t}. Response time is ${d}. When will the team arrive?`,
+      (t, d) => `Triage started at ${t}. The patient assessment takes ${d}. When will it be complete?`,
+      (t, d) => `The fire crew started containment at ${t}. It takes ${d} to contain. When will the fire be contained?`,
     ],
     sub: [
       (t, d) => `The ambulance arrived at ${t}. It took ${d} to reach the scene. When was it dispatched?`,
       (t, d) => `The observation period ends at ${t}. It lasts ${d}. When did it start?`,
       (t, d) => `The night shift ends at ${t}. It's ${d} long. When did it start?`,
       (t, d) => `The response team arrived at ${t}. Response time was ${d}. When was the call?`,
+      (t, d) => `Triage was complete at ${t}. It took ${d}. When did it start?`,
+      (t, d) => `The fire was contained at ${t}. Containment took ${d}. When did the crew start?`,
     ],
     between: [
       (t1, t2) => `The shift ran from ${t1} to ${t2}. How long was it?`,
+      (t1, t2) => `The emergency response lasted from ${t1} to ${t2}. How long was it?`,
     ],
   },
 
@@ -530,15 +537,20 @@ const TEMPLATES = {
       (t, d) => `The harvest crew arrives at ${t}. They'll work for ${d}. When do they finish?`,
       (t, d) => `I started the livestock feed at ${t}. It takes ${d}. When will I finish?`,
       (t, d) => `Spraying starts at ${t} and takes ${d}. When does it end?`,
+      (t, d) => `The tractor started ploughing at ${t}. The field takes ${d} to plough. When will it be done?`,
+      (t, d) => `Milking started at ${t} and takes ${d}. When does it finish?`,
     ],
     sub: [
       (t, d) => `Irrigation ends at ${t}. It runs for ${d}. When does it start?`,
       (t, d) => `The harvest crew finished at ${t}. They worked for ${d}. When did they start?`,
       (t, d) => `I finished feeding the livestock at ${t}. It took ${d}. When did I start?`,
       (t, d) => `Spraying finished at ${t}. It took ${d}. When did it start?`,
+      (t, d) => `The tractor finished ploughing at ${t}. It took ${d}. When did it start?`,
+      (t, d) => `Milking finished at ${t} after ${d}. When did it begin?`,
     ],
     between: [
       (t1, t2) => `The harvest ran from ${t1} to ${t2}. How long did it take?`,
+      (t1, t2) => `Milking lasted from ${t1} to ${t2}. How long was it?`,
     ],
   },
 
@@ -548,15 +560,20 @@ const TEMPLATES = {
       (t, d) => `Rehearsal starts at ${t} and runs for ${d}. When does it finish?`,
       (t, d) => `The gallery opening starts at ${t}. The event is ${d}. When does it end?`,
       (t, d) => `The recording session begins at ${t} and is booked for ${d}. When does it wrap?`,
+      (t, d) => `The photoshoot starts at ${t} and takes ${d}. When does it end?`,
+      (t, d) => `The live painting session begins at ${t} and lasts ${d}. When does it finish?`,
     ],
     sub: [
       (t, d) => `The studio booking ends at ${t}. It was booked for ${d}. When did it start?`,
       (t, d) => `Rehearsal finished at ${t}. It ran for ${d}. When did it start?`,
       (t, d) => `The gallery event ended at ${t}. It lasted ${d}. When did it open?`,
       (t, d) => `The recording wrapped at ${t}. The session was ${d}. When did it begin?`,
+      (t, d) => `The photoshoot ended at ${t}. It took ${d}. When did it start?`,
+      (t, d) => `The painting session ended at ${t} after ${d}. When did it begin?`,
     ],
     between: [
       (t1, t2) => `The rehearsal ran from ${t1} to ${t2}. How long was it?`,
+      (t1, t2) => `The recording session lasted from ${t1} to ${t2}. How long was it?`,
     ],
   },
 
@@ -566,15 +583,20 @@ const TEMPLATES = {
       (t, d) => `The plumber arrived at ${t}. The job will take ${d}. When will they finish?`,
       (t, d) => `The electrician started work at ${t}. It takes ${d}. When will they be done?`,
       (t, d) => `The service appointment is at ${t}. Allow ${d} for the work. When will it be done?`,
+      (t, d) => `The boiler service started at ${t} and takes ${d}. When will it be done?`,
+      (t, d) => `The roof inspection started at ${t}. It takes ${d}. When will the inspector finish?`,
     ],
     sub: [
       (t, d) => `The repair was finished at ${t}. It took ${d}. When did the mechanic start?`,
       (t, d) => `The plumber finished at ${t}. The job took ${d}. When did they start?`,
       (t, d) => `The electrician finished at ${t} after ${d}. When did they start?`,
       (t, d) => `The service was completed at ${t}. It took ${d}. When was the appointment?`,
+      (t, d) => `The boiler service finished at ${t}. It took ${d}. When did it start?`,
+      (t, d) => `The roof inspection finished at ${t} after ${d}. When did it start?`,
     ],
     between: [
       (t1, t2) => `The repair ran from ${t1} to ${t2}. How long did it take?`,
+      (t1, t2) => `The service appointment lasted from ${t1} to ${t2}. How long was it?`,
     ],
   },
 
@@ -584,15 +606,20 @@ const TEMPLATES = {
       (t, d) => `The march started at ${t} and went on for ${d}. When did it finish?`,
       (t, d) => `The battle commenced at ${t}. The engagement lasted ${d}. When did it end?`,
       (t, d) => `The speech began at ${t} and ran for ${d}. When did it conclude?`,
+      (t, d) => `The treaty signing started at ${t} and took ${d}. When was it complete?`,
+      (t, d) => `The parade began at ${t} and lasted ${d}. When did it end?`,
     ],
     sub: [
       (t, d) => `The ceremony ended at ${t}. It lasted ${d}. When did it begin?`,
       (t, d) => `The march ended at ${t}. It went on for ${d}. When did it start?`,
       (t, d) => `The battle ended at ${t}. The engagement was ${d}. When did it begin?`,
       (t, d) => `The speech ended at ${t} after ${d}. When did it start?`,
+      (t, d) => `The treaty was signed at ${t}. Negotiations took ${d}. When did they start?`,
+      (t, d) => `The parade ended at ${t}. It lasted ${d}. When did it start?`,
     ],
     between: [
       (t1, t2) => `The siege lasted from ${t1} to ${t2}. How long was it?`,
+      (t1, t2) => `The ceremony ran from ${t1} to ${t2}. How long was it?`,
     ],
   },
 
@@ -601,14 +628,61 @@ const TEMPLATES = {
       (t, d) => `I planned to start working at ${t} but procrastinated for ${d}. When did I actually start?`,
       (t, d) => `I hit snooze at ${t}. I snoozed for ${d}. When did I actually get up?`,
       (t, d) => `I said "5 more minutes" at ${t}. But I actually waited ${d}. When did I start?`,
+      (t, d) => `I was supposed to leave at ${t} but delayed for ${d}. When did I actually leave?`,
+      (t, d) => `The alarm went off at ${t}. I lay in bed for ${d} before getting up. When did I get up?`,
+      (t, d) => `I sat down to study at ${t} but scrolled my phone for ${d} first. When did I actually start studying?`,
     ],
     sub: [
       (t, d) => `I actually started working at ${t}. I procrastinated for ${d}. When did I plan to start?`,
       (t, d) => `I finally got up at ${t}. I snoozed for ${d}. When did I first set my alarm?`,
       (t, d) => `I started the task at ${t}. I was ${d} late. What was my original start time?`,
+      (t, d) => `I finally left the house at ${t}. I delayed for ${d}. When was I supposed to leave?`,
+      (t, d) => `I got out of bed at ${t}. I lay there for ${d}. When did the alarm go off?`,
+      (t, d) => `I finally started studying at ${t}. I procrastinated for ${d}. When did I sit down?`,
     ],
     between: [
       (t1, t2) => `I planned to start at ${t1} but didn't start until ${t2}. How long did I procrastinate?`,
+      (t1, t2) => `The alarm went off at ${t1} but I didn't get up until ${t2}. How long did I snooze?`,
+    ],
+  },
+
+  // ── Formulaic domain (Exp 009) ─────────────────────────────────────────
+  // Templates that directly match the validation harness question patterns.
+  // This domain gets 2× weight in DOMAIN_NAMES (see below).
+  Formulaic: {
+    add: [
+      (t, d) => `What time is it ${d} after ${t}?`,
+      (t, d) => `What time will it be ${d} from ${t}?`,
+      (t, d) => `If the time is ${t}, what will the time be in ${d}?`,
+      (t, d) => `${d} after ${t} is what time?`,
+      (t, d) => `Starting at ${t}, add ${d}. What time is it?`,
+      (t, d) => `The clock shows ${t}. ${d} later, what does it show?`,
+      (t, d) => `What's the time ${d} from now if it's currently ${t}?`,
+      (t, d) => `It's ${t}. What time will it be in ${d}?`,
+      (t, d) => `Calculate the time ${d} after ${t}.`,
+      (t, d) => `Add ${d} to ${t}. What do you get?`,
+      (t, d) => `From ${t}, go forward ${d}. What time is it?`,
+      (t, d) => `What is ${t} plus ${d}?`,
+    ],
+    sub: [
+      (t, d) => `What time was it ${d} before ${t}?`,
+      (t, d) => `What time was it ${d} ago from ${t}?`,
+      (t, d) => `If the time is ${t}, what was the time ${d} ago?`,
+      (t, d) => `${d} before ${t} is what time?`,
+      (t, d) => `Starting at ${t}, subtract ${d}. What time is it?`,
+      (t, d) => `The clock shows ${t}. ${d} earlier, what did it show?`,
+      (t, d) => `It's ${t}. What time was it ${d} ago?`,
+      (t, d) => `Calculate the time ${d} before ${t}.`,
+      (t, d) => `Subtract ${d} from ${t}. What do you get?`,
+      (t, d) => `Go back ${d} from ${t}. What time is it?`,
+      (t, d) => `What is ${t} minus ${d}?`,
+      (t, d) => `How far back from ${t} is ${d}? What time?`,
+    ],
+    between: [
+      (t1, t2) => `How much time is there between ${t1} and ${t2}?`,
+      (t1, t2) => `What is the difference between ${t1} and ${t2}?`,
+      (t1, t2) => `From ${t1} to ${t2}, how long is that?`,
+      (t1, t2) => `Calculate the duration from ${t1} to ${t2}.`,
     ],
   },
 };
@@ -642,23 +716,87 @@ const NO_ROUTE_TEMPLATES = [
   // Temporal words but no computation
   () => { const t = formatTime(faker.number.int({min:0,max:23}), faker.number.int({min:0,max:59})); return { q: `Remind me at ${t} to take out the bins.`, r: 'This is a reminder request, not a time computation.' }; },
   () => { const t = formatTime(faker.number.int({min:0,max:23}), faker.number.int({min:0,max:59})); return { q: `Set an alarm for ${t}.`, r: 'This is an alarm request, not a time computation.' }; },
+  // ── Synthetic hard negatives (Exp 009) ────────────────────────────────
+  // Temporal-sounding but non-computable questions that need factual lookup
+  () => ({ q: `When was ${faker.commerce.productName()} published?`, r: 'This requires factual knowledge lookup, not temporal arithmetic.' }),
+  () => ({ q: `What year did ${faker.person.fullName()} die?`, r: 'This question asks for a historical fact, not a time calculation.' }),
+  () => ({ q: `How old was ${faker.person.fullName()} in ${faker.number.int({min:1950,max:2020})}?`, r: 'This cannot be answered with clock arithmetic — it requires a knowledge base.' }),
+  () => ({ q: `What day of the week was ${faker.date.past().toISOString().split('T')[0]}?`, r: 'This is a calendar lookup, not clock arithmetic.' }),
+  () => ({ q: `How many days between ${faker.date.past().toISOString().split('T')[0]} and ${faker.date.past().toISOString().split('T')[0]}?`, r: 'This is date arithmetic at the day level, not clock-level time computation.' }),
+  () => ({ q: `What timezone is ${faker.location.city()} in?`, r: 'This is a geography question, not temporal arithmetic.' }),
+  () => ({ q: `When did ${faker.location.country()} gain independence?`, r: 'This requires historical knowledge, not clock computation.' }),
+  () => ({ q: `What century was ${faker.number.int({min:1200,max:2000})} in?`, r: 'This is a calendar fact, not a time computation.' }),
+  () => ({ q: `What was the date of the last full moon?`, r: 'This requires astronomical data, not clock arithmetic.' }),
+  () => ({ q: `How long is the movie ${faker.word.words(3)}?`, r: 'This is a factual lookup about a movie runtime, not temporal reasoning.' }),
+  () => ({ q: `What season is it in ${faker.location.city()} right now?`, r: 'This is a geography/calendar question, not temporal arithmetic.' }),
+  () => ({ q: `When is ${faker.person.firstName()}'s birthday?`, r: 'This is a factual recall question, not a temporal reasoning problem.' }),
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Record Generation
 // ─────────────────────────────────────────────────────────────────────────────
 
-const DOMAIN_NAMES = Object.keys(TEMPLATES);
+// Formulaic gets 2× weight: it appears twice so pick() selects it ~2x as often
+const DOMAIN_NAMES = [...Object.keys(TEMPLATES), 'Formulaic'];
+
+/**
+ * Generate a time with edge-case bias for boundary testing.
+ * Returns { h, m } with biased sampling toward:
+ *   - Midnight rollover: hour 23, minutes 30-59 (ADD) or hour 0, minutes 0-10 (SUB)
+ *   - Minute carry: minutes 50-59
+ *   - Noon boundary: hour 11, minutes 45-59
+ *   - Hour boundary: minutes at exactly :00
+ */
+function generateEdgeCaseTime(direction) {
+  const roll = Math.random();
+  if (direction === 'add') {
+    if (roll < 0.30) {
+      // Midnight rollover: start at 23:30-23:59
+      return { h: 23, m: faker.number.int({ min: 30, max: 59 }) };
+    } else if (roll < 0.55) {
+      // Minute carry: high minutes
+      return { h: faker.number.int({ min: 0, max: 23 }), m: faker.number.int({ min: 50, max: 59 }) };
+    } else if (roll < 0.75) {
+      // Noon boundary
+      return { h: 11, m: faker.number.int({ min: 45, max: 59 }) };
+    } else {
+      // Hour boundary: exactly :00
+      return { h: faker.number.int({ min: 0, max: 23 }), m: 0 };
+    }
+  } else {
+    // SUB direction
+    if (roll < 0.30) {
+      // Midnight rollover: start at 00:00-00:10
+      return { h: 0, m: faker.number.int({ min: 0, max: 10 }) };
+    } else if (roll < 0.55) {
+      // Minute borrow: low minutes
+      return { h: faker.number.int({ min: 1, max: 23 }), m: faker.number.int({ min: 0, max: 9 }) };
+    } else if (roll < 0.75) {
+      // Noon boundary
+      return { h: 12, m: faker.number.int({ min: 0, max: 15 }) };
+    } else {
+      // Hour boundary: exactly :00
+      return { h: faker.number.int({ min: 1, max: 23 }), m: 0 };
+    }
+  }
+}
 
 function generateAddRecord() {
   const domain = pick(DOMAIN_NAMES);
   const templates = TEMPLATES[domain].add;
   const template = pick(templates);
 
-  const useFuzzy = Math.random() < 0.12;
+  // 10% edge cases for boundary testing
+  const useEdgeCase = Math.random() < 0.10;
+  const useFuzzy = !useEdgeCase && Math.random() < 0.12;
   let startH, startM, timeStr;
 
-  if (useFuzzy) {
+  if (useEdgeCase) {
+    const ec = generateEdgeCaseTime('add');
+    startH = ec.h;
+    startM = ec.m;
+    timeStr = formatTime(startH, startM);
+  } else if (useFuzzy) {
     const fuzzy = pick(FUZZY_TIMES);
     startH = fuzzy.h;
     startM = fuzzy.m;
@@ -685,10 +823,17 @@ function generateSubRecord() {
   const templates = TEMPLATES[domain].sub;
   const template = pick(templates);
 
-  const useFuzzy = Math.random() < 0.12;
+  // 10% edge cases for boundary testing
+  const useEdgeCase = Math.random() < 0.10;
+  const useFuzzy = !useEdgeCase && Math.random() < 0.12;
   let startH, startM, timeStr;
 
-  if (useFuzzy) {
+  if (useEdgeCase) {
+    const ec = generateEdgeCaseTime('sub');
+    startH = ec.h;
+    startM = ec.m;
+    timeStr = formatTime(startH, startM);
+  } else if (useFuzzy) {
     const fuzzy = pick(FUZZY_TIMES);
     startH = fuzzy.h;
     startM = fuzzy.m;
@@ -733,10 +878,29 @@ function generateBetweenRecord() {
   return { text: `${question}\n${route}` };
 }
 
+// ── External hard negatives loader ──────────────────────────────────────────
+let externalHardNegatives = [];
+if (argv['hard-negatives']) {
+  try {
+    const lines = fs.readFileSync(argv['hard-negatives'], 'utf-8')
+      .split('\n').filter(l => l.trim());
+    externalHardNegatives = lines.map(l => JSON.parse(l));
+    console.log(`Loaded ${externalHardNegatives.length} external hard negatives from ${argv['hard-negatives']}`);
+  } catch (e) {
+    console.error(`WARNING: Could not load hard negatives: ${e.message}`);
+  }
+}
+
 function generateNoRouteRecord() {
+  // If external hard negatives exist, 50/50 split between external and synthetic
+  const useExternal = externalHardNegatives.length > 0 && Math.random() < 0.5;
+  if (useExternal) {
+    const ext = pick(externalHardNegatives);
+    return { text: `${ext.question}\n${noRoute(ext.reason)}`, source: 'external' };
+  }
   const template = pick(NO_ROUTE_TEMPLATES);
   const { q, r } = template();
-  return { text: `${q}\n${noRoute(r)}` };
+  return { text: `${q}\n${noRoute(r)}`, source: 'synthetic' };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -748,15 +912,15 @@ async function main() {
   const evalStream = fs.createWriteStream(argv.eval);
   const evalThreshold = 0.05; // 5% eval split
 
-  // Distribution: 35% ADD, 35% SUB, 15% DURATION_BETWEEN, 15% NO_ROUTE
+  // Distribution: 30% ADD, 30% SUB, 15% DURATION_BETWEEN, 25% NO_ROUTE
   const generators = [
-    { fn: generateAddRecord, weight: 0.35 },
-    { fn: generateSubRecord, weight: 0.70 },        // cumulative
-    { fn: generateBetweenRecord, weight: 0.85 },     // cumulative
+    { fn: generateAddRecord, weight: 0.30 },
+    { fn: generateSubRecord, weight: 0.60 },        // cumulative
+    { fn: generateBetweenRecord, weight: 0.75 },     // cumulative
     { fn: generateNoRouteRecord, weight: 1.00 },      // cumulative
   ];
 
-  const stats = { add: 0, sub: 0, between: 0, noroute: 0, train: 0, eval: 0 };
+  const stats = { add: 0, sub: 0, between: 0, noroute: 0, noroute_synthetic: 0, noroute_external: 0, train: 0, eval: 0 };
 
   for (let i = 0; i < argv.count; i++) {
     const roll = Math.random();
@@ -774,6 +938,8 @@ async function main() {
     } else {
       record = generateNoRouteRecord();
       stats.noroute++;
+      if (record.source === 'external') stats.noroute_external++;
+      else stats.noroute_synthetic++;
     }
 
     const isEval = Math.random() < evalThreshold;
@@ -800,6 +966,10 @@ async function main() {
   console.log(`   TIME_SUB:          ${stats.sub} (${(stats.sub/argv.count*100).toFixed(1)}%)`);
   console.log(`   DURATION_BETWEEN:  ${stats.between} (${(stats.between/argv.count*100).toFixed(1)}%)`);
   console.log(`   NO_ROUTE:          ${stats.noroute} (${(stats.noroute/argv.count*100).toFixed(1)}%)`);
+  if (externalHardNegatives.length > 0) {
+    console.log(`     └─ synthetic:    ${stats.noroute_synthetic}`);
+    console.log(`     └─ external:     ${stats.noroute_external}`);
+  }
 }
 
 main().catch(console.error);

@@ -28,3 +28,5 @@ experiments/**/weights/
 experiments/**/training.log
 experiments/**/training.pid
 .hf_cache/
+# Hard negative extraction cache
+data/hard_negatives/ComplexTempQA_small.json

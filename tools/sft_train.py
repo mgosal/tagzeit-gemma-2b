@@ -29,6 +29,10 @@ def main():
     parser.add_argument("--max_steps", type=int, default=None, help="Override maximum training steps")
     parser.add_argument("--resume_from_checkpoint", type=str, default=None,
                         help="Path to checkpoint to resume training from (or 'last')")
+    parser.add_argument("--gradient_checkpointing", action="store_true",
+                        help="Enable gradient checkpointing (reduces VRAM, slower). Recommended for models >500M.")
+    parser.add_argument("--bf16", action="store_true",
+                        help="Use bf16 instead of fp16 on CUDA (recommended for Llama models).")
     args = parser.parse_args()
 
     # ── Device Detection ─────────────────────────────────────────────────
@@ -179,9 +183,9 @@ def main():
         optim="adamw_8bit" if use_8bit_optim else "adamw_torch",
 
         # ── precision ────────────────────────────────────────────────
-        # MPS: fp32 only. CUDA: fp16/bf16 for large models.
-        fp16=(device == "cuda" and not args.tiny),
-        bf16=False,
+        # MPS: fp32 only. CUDA: bf16 preferred for Llama, fp16 fallback.
+        fp16=(device == "cuda" and not args.tiny and not args.bf16),
+        bf16=(device == "cuda" and not args.tiny and args.bf16),
 
         # ── logging / eval ───────────────────────────────────────────
         logging_steps=10,
@@ -196,6 +200,9 @@ def main():
 
         # ── reproducibility ──────────────────────────────────────────
         seed=3407,
+
+        # ── gradient checkpointing (for large models) ───────────────
+        gradient_checkpointing=args.gradient_checkpointing,
     )
 
     # ── Trainer ──────────────────────────────────────────────────────────

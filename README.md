@@ -60,8 +60,9 @@ llm-deficiency-index/
 ├── common-docs/                            # Contribution guides
 ├── tools/                                  # Shared CLI scripts (training, evaluation)
 │   ├── validate.py                         # Multi-mode evaluation harness
-│   ├── validate_route.py                   # Route-to-Luxon E2E harness
-│   └── format_for_model.py                 # SFT data formatter
+│   ├── validate_route.py                   # Route-to-Luxon E2E harness (model-agnostic)
+│   ├── format_for_model.py                 # SFT data formatter (any chat-template model)
+│   └── extract_hard_negatives.py           # ComplexTempQA hard-negative extractor
 └── README.md                               # ← You are here
 ```
 
@@ -120,6 +121,10 @@ The validation harness (`tools/validate.py`) auto-detects the correct prompt for
 python tools/validate.py --model_id HuggingFaceTB/SmolLM2-360M-Instruct \
   --backend auto --mode direct --output results/baseline_smollm2_360m.json
 
+# Llama 3.2-1B (Llama format) — requires HF token
+python tools/validate.py --model_id meta-llama/Llama-3.2-1B-Instruct \
+  --backend auto --mode direct --output results/baseline_llama_1b.json
+
 # Gemma-2B-it (Gemma format)
 python tools/validate.py --model_id google/gemma-2-2b-it \
   --backend auto --mode direct --output results/baseline_gemma2_2b.json
@@ -153,12 +158,14 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | 007b | Gemma-2B | LoRA+Chat | 5.6K | 1,250 | — | 0% | Natural language plateau |
 | 008a | SmolLM2-360M | Full FT | 95K | ~4,000 | — | — | VM crash, lost to ephemeral storage |
 | **008b** | SmolLM2-360M | Full FT | **95K balanced** | **10,000** | **0.267** | **2.1%** | Distribution mismatch identified |
+| **009** | **Llama 3.2-1B** | Full FT | **95K diverse** | **5,000** | — | **Pending** | Formulaic templates + hard negatives + edge cases |
 
 ### Key Findings
 - **Full FT required** for novel token grammar; LoRA insufficient on small models
 - **Data balance** directly impacts directional accuracy (ADD vs SUB)
 - **Training-test distribution mismatch** is the primary failure mode — model learns domain-contextual routing but doesn't generalise to formulaic questions
 - **Catastrophic forgetting** measured: HellaSwag −9.6pt, ARC −13.8pt, PIQA −7.1pt vs vanilla
+- **Model progression:** SmolLM2-360M → Llama 3.2-1B → Qwen2.5-1.5B → Gemma-2B
 - Detailed reports in [`experiments/route-to-luxon/reports/`](./experiments/route-to-luxon/reports/)
 
 ## Roadmap
@@ -173,7 +180,7 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Baseline measurement (vanilla Gemma-2B) | ✅ Complete (52.1% Direct) |
 | 100K balanced dataset + 10K steps | ✅ Complete (Exp 008b) |
 | Standard benchmark comparison (lm-eval) | ✅ Complete |
-| Generator diversity expansion + hard negatives | 🟡 Next (Exp 009) |
+| Generator diversity + hard negatives + Llama 1B | 🟢 Active (Exp 009) |
 | Second deficiency experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 
