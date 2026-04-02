@@ -160,13 +160,14 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | **008b** | SmolLM2-360M | Full FT | **95K balanced** | **10,000** | **0.267** | **2.1%** | Distribution mismatch identified |
 | 009a | SmolLM2-360M | Full FT | 14K v2 | 1,000 | NaN | 0% | fp16 on T4 caused weight corruption |
 | **009** | **Llama 3.2-1B** | Full FT | **5K v2** | **250** | **0.407** | **100% routing** | 6/6 operation routing at 250 steps |
-| **010** | **Llama 3.2-1B** | Full FT | **100K v2** | **5,000** | — | **Pending** | Full run with 500-step checkpoints |
+| **010** | **Llama 3.2-1B** | Full FT | **100K v2** | **2,500** | **0.288** | **100% routing + args** | Perfect operator & operand extraction |
 
 ### Key Findings
 - **Full FT required** for novel token grammar; LoRA insufficient on small models
 - **Data balance** directly impacts directional accuracy (ADD vs SUB)
 - **Training-test distribution mismatch** is the primary failure mode — model learns domain-contextual routing but doesn't generalise to formulaic questions
 - **Catastrophic forgetting** measured: HellaSwag −9.6pt, ARC −13.8pt, PIQA −7.1pt vs vanilla
+- **Model capacity is decisive:** Llama 3.2-1B achieved in 250 steps what SmolLM2-360M could not in 10K
 - **Model progression:** SmolLM2-360M → Llama 3.2-1B → Qwen2.5-1.5B → Gemma-2B
 - Detailed reports in [`experiments/route-to-luxon/reports/`](./experiments/route-to-luxon/reports/)
 
@@ -183,7 +184,8 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | 100K balanced dataset + 10K steps | ✅ Complete (Exp 008b) |
 | Standard benchmark comparison (lm-eval) | ✅ Complete |
 | Generator diversity + hard negatives + Llama 1B | ✅ Complete (Exp 009: 100% routing) |
-| Full 5K Llama 1B training run | 🟢 Active (Exp 010) |
+| Full Llama 1B training run | ✅ Complete (Exp 010: 100% routing + args at 2500 steps) |
+| E2E validation through Luxon engine | 🟢 Active |
 | Second deficiency experiment scaffolded | 🔲 Future |
 | Shared evaluation dashboard | 🔲 Future |
 
