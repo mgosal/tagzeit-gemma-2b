@@ -160,7 +160,7 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | **008b** | SmolLM2-360M | Full FT | **95K balanced** | **10,000** | **0.267** | **2.1%** | Distribution mismatch identified |
 | 009a | SmolLM2-360M | Full FT | 14K v2 | 1,000 | NaN | 0% | fp16 on T4 caused weight corruption |
 | **009** | **Llama 3.2-1B** | Full FT | **5K v2** | **250** | **0.407** | **100% routing** | 6/6 operation routing at 250 steps |
-| **010** | **Llama 3.2-1B** | Full FT | **100K v2** | **2,500** | **0.288** | **100% routing + args** | Perfect operator & operand extraction |
+| **010** | **Llama 3.2-1B** | Full FT | **100K v2** | **2,500** | **0.288** | **79.2% (38/48)** | Gaps: >60min durations, invalid inputs |
 
 ### Key Findings
 - **Full FT required** for novel token grammar; LoRA insufficient on small models
@@ -185,9 +185,12 @@ Please read [`common-docs/CONTRIBUTING.md`](./common-docs/CONTRIBUTING.md) befor
 | Standard benchmark comparison (lm-eval) | ✅ Complete |
 | Generator diversity + hard negatives + Llama 1B | ✅ Complete (Exp 009: 100% routing) |
 | Full Llama 1B training run | ✅ Complete (Exp 010: 100% routing + args at 2500 steps) |
-| E2E validation through Luxon engine | 🟢 Active |
-| Second deficiency experiment scaffolded | 🔲 Future |
-| Shared evaluation dashboard | 🔲 Future |
+| E2E validation through Luxon engine | ✅ Complete (79.2% — 38/48) |
+| Generator fix: >60min durations (#31) | 🟢 Next |
+| Generator fix: INVALID inputs (#32) | 🟢 Next |
+| Held-out adversarial test set (#33) | 🔲 Future |
+| Multi-step composition (#27) | 🔲 Future |
+| Domain expansion beyond temporal (#28) | 🔲 Future |
 
 ## License
 

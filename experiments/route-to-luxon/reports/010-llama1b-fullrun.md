@@ -40,7 +40,7 @@ All ADD, SUB, BETWEEN, and NO_ROUTE operations correctly classified.
 
 ### Argument Precision: 8/8 (100%)
 
-Every operand correctly extracted. Comparison to Exp 009 (250 steps):
+Every operand correctly extracted (durations <= 59 min). Comparison to Exp 009 (250 steps):
 
 | Prompt | 009 (250 steps) | 010 (2500 steps) |
 |--------|----------------|------------------|
@@ -52,45 +52,63 @@ Every operand correctly extracted. Comparison to Exp 009 (250 steps):
 | "14:30" | ARG_MIN_00 | ARG_MIN_30 |
 | "45 minutes" | ARG_MIN_44 | ARG_MIN_45 |
 
-### Sample Outputs
+## E2E Validation (48-case harness via Luxon engine)
+
+### Overall: 38/48 passed (79.2%)
+
+| Category | Score | Status |
+|----------|-------|--------|
+| subtraction | 5/5 | PASS |
+| format_robust | 5/5 | PASS |
+| semantic_eq | 5/5 | PASS |
+| midnight_boundary | 1/1 | PASS |
+| minute_carry | 7/8 (88%) | 1 fail (61 min duration) |
+| hour_rollover | 6/7 (86%) | 1 fail (90 min duration) |
+| cascade | 4/5 (80%) | 1 fail (90 min duration) |
+| standard | 5/6 (83%) | 1 fail (70 min duration) |
+| generalization | 0/3 (0%) | All >60 min durations |
+| impossible | 0/3 (0%) | No INVALID training data |
+
+### Failure Analysis
+
+**Gap 1: Multi-hour duration decomposition (7 failures, issue #31)**
+Model emits `[ARG_HOUR_01] [ARG_MIN_00]` instead of `[ARG_HOUR_01] [ARG_MIN_30]` for 90-minute durations. The generator under-represents >59min durations.
+
+**Gap 2: Invalid input detection (3 failures, issue #32)**
+Model routes "12:65", "25:00", and "13:45 PM" as valid. No INVALID examples in training data.
+
+### Sample Correct Outputs
 
 ```
-Q: What time is it 1 minute after 23:59?
-A: [ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_23] [ARG_MIN_59] [HEAD_DURATION] [ARG_MIN_01] [/ROUTE]
-
-Q: What time was it 30 minutes before 00:15?
-A: [ROUTE] [ROUTE_TIME_SUB] [HEAD_TIME] [ARG_HOUR_00] [ARG_MIN_15] [HEAD_DURATION] [ARG_MIN_30] [/ROUTE]
-
-Q: How much time is there between 09:00 and 17:30?
-A: [ROUTE] [ROUTE_DURATION_BETWEEN] [HEAD_TIME] [ARG_HOUR_09] [ARG_MIN_00] [HEAD_TIME] [ARG_HOUR_17] [ARG_MIN_30] [/ROUTE]
-
-Q: The meeting starts at 14:30 and lasts 45 minutes. When does it end?
-A: [ROUTE] [ROUTE_TIME_ADD] [HEAD_TIME] [ARG_HOUR_14] [ARG_MIN_30] [HEAD_DURATION] [ARG_MIN_45] [/ROUTE]
-
-Q: What is 42 + 18?
-A: [NO_ROUTE] This is base-10 arithmetic, not temporal.
-
-Q: When was The Secret Garden published?
-A: [NO_ROUTE] This requires factual knowledge lookup, not temporal arithmetic.
+BP-01: 23:59 + 1 minute    -> 00:00 (correct, midnight rollover)
+BP-03: 23:45 + 30 minutes  -> 00:15 (correct, midnight rollover)
+BP-08: 23:30 + 45 minutes  -> 00:15 (correct, midnight rollover)
+TM-06: 07:00 + 120 minutes -> 09:00 (correct, 2-hour round duration)
+FR-01: 1 8 : 5 9 + 1 min   -> 19:00 (correct, spaced format)
+SB-03: 00:05 - 10 minutes  -> 23:55 (correct, reverse midnight)
+SB-04: 12:00 - 120 minutes -> 10:00 (correct, 2-hour subtraction)
 ```
 
-(Note: trailing token repetition after [/ROUTE] in raw output, truncated above. Trivially fixable in post-processing.)
+### Sample Failed Outputs
 
-### Remaining Issue
+```
+BP-09: 22:50 + 90 min -> 23:50 (expected 00:20, model emitted 60 min not 90)
+TG-02: 08:30 + 200 min -> 08:50 (expected 11:50, model emitted 20 min not 200)
+IM-01: 12:65 + 5 min -> 12:50 (expected INVALID, model routed as valid)
+```
 
-Trailing token repetition after the first [/ROUTE] closure. The model correctly emits the full ROUTE expression but does not stop generating. Post-processing truncation at [/ROUTE] resolves this.
+## Comparison Across All Experiments
 
-## Comparison Across Experiments
-
-| Exp | Model | Steps | Eval Loss | Op Routing | Arg Precision |
-|-----|-------|-------|-----------|------------|---------------|
-| 004 | SmolLM2-360M | 5,000 | -- | 25% | Poor |
-| 008b | SmolLM2-360M | 10,000 | 0.267 | 2.1% | N/A |
-| 009 | Llama 3.2-1B | 250 | 0.407 | 100% | 0% (all wrong) |
-| **010** | **Llama 3.2-1B** | **2,500** | **0.288** | **100%** | **100%** |
+| Exp | Model | Steps | Eval Loss | E2E Accuracy |
+|-----|-------|-------|-----------|--------------|
+| 004 | SmolLM2-360M | 5,000 | -- | 25.0% |
+| 008b | SmolLM2-360M | 10,000 | 0.267 | 2.1% |
+| 009 | Llama 3.2-1B | 250 | 0.407 | 100% routing / args wrong |
+| **010** | **Llama 3.2-1B** | **2,500** | **0.288** | **79.2% (38/48)** |
 
 ## Next Steps
 
-- Run full E2E validation through Luxon engine (validate_route.py)
-- Post-process output: truncate at first [/ROUTE]
-- Package checkpoint for production use
+1. Fix generator: add >60min duration templates with proper hour+minute decomposition (#31)
+2. Fix generator: add INVALID input examples (#32)
+3. Create held-out adversarial test set independent of generator (#33)
+4. Retrain with improved data -> target >93% E2E
