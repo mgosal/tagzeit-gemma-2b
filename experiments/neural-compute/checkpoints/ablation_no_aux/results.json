@@ -1,0 +1,17 @@
+{
+  "ablation": "no_aux_operand_loss",
+  "n_seeds": 5,
+  "seeds": [
+    42,
+    123,
+    7,
+    2024,
+    31415
+  ],
+  "e2e_accuracy_mean": 0.179333333671093,
+  "e2e_accuracy_std": 0.047763884539978,
+  "oracle_accuracy_mean": 0.18166666477918625,
+  "oracle_accuracy_std": 0.04674101093626542,
+  "router_accuracy_mean": 0.9433333277702332,
+  "router_accuracy_std": 0.010408320071173668
+}

@@ -1,0 +1,32 @@
+{
+  "seed": 42,
+  "n_total": 600,
+  "calibration": {
+    "router_correct_answer_correct": 557,
+    "router_correct_answer_wrong": 0,
+    "router_wrong_answer_correct": 1,
+    "router_wrong_answer_wrong": 42,
+    "accidental_agreement_rate": 0.023255813953488372
+  },
+  "oracle_failures": {
+    "count": 0,
+    "rate": 0.0
+  },
+  "confusion_matrix": {
+    "IntAdd_true": {
+      "IntAdd_pred": 184,
+      "Mod_pred": 2,
+      "Greater_pred": 14
+    },
+    "Mod_true": {
+      "IntAdd_pred": 0,
+      "Mod_pred": 200,
+      "Greater_pred": 0
+    },
+    "Greater_true": {
+      "IntAdd_pred": 22,
+      "Mod_pred": 5,
+      "Greater_pred": 173
+    }
+  }
+}

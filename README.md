@@ -17,11 +17,11 @@ Deficiency areas are organised into high-level categories derived from [Issue #9
 | Category | Description | Status |
 |---|---|---|
 | **Temporal** | Date arithmetic, relative time reasoning, calendar-system awareness | 🟢 Active — [Tagzeit](./experiments/temporal-tagzeit/) |
-| **Mathematical** | Base-N arithmetic, symbolic manipulation, numerical precision | 🔲 Planned |
+| **Mathematical** | Base-N arithmetic, symbolic manipulation, numerical precision | 🟢 Active — [Compute Layer](./src/compute_layer/) |
 | **Planning** | Multi-step goal decomposition, loop handling, constraint satisfaction | 🔲 Planned |
 | **Agentic** | Tool use, state tracking across turns, recovery from failed actions | 🔲 Planned |
 | **Linguistic** | Pragmatics, idiomatic interpretation, cross-lingual transfer gaps | 🔲 Planned |
-| **Logical** | Deductive and abductive reasoning, syllogistic consistency | 🔲 Planned |
+| **Logical** | Deductive and abductive reasoning, syllogistic consistency | 🟡 Primitives built — [Compute Layer](./src/compute_layer/) |
 | **Spatial** | Relative positioning, map/graph traversal, geometric reasoning | 🔲 Planned |
 | **Ethical / Safety** | Value alignment edge cases, refusal calibration, bias propagation | 🔲 Planned |
 
@@ -38,6 +38,12 @@ llm-deficiency-index/
 │       └── generators/temporal/
 │           └── generator.js                # Route-format training data generator
 ├── src/                                    # Model-facing code
+│   ├── compute_layer/                      # 🟢 RISC ALU — exact arithmetic as neural layers
+│   │   ├── alu.py                          # 5 primitives: Add, Sub, Mul, Div, Floor
+│   │   ├── programs/                       # Zero-param programs (Mod, TimeAdd, Greater, etc.)
+│   │   ├── layer.py                        # ComputeLayer — router + extractors + dispatch
+│   │   ├── gates.py                        # Phase Zero: binary logic gates
+│   │   └── adders.py                       # Phase Zero: binary adders
 │   ├── tokenizer/
 │   │   ├── domain_tokenizer.py             # Symbolic Expression Detector (plugin arch)
 │   │   └── compilers/
@@ -46,15 +52,22 @@ llm-deficiency-index/
 │       └── resize_embeddings.py            # Geometric sinusoidal embedding init
 ├── experiments/                            # Individual deficiency studies
 │   ├── temporal-tagzeit/                   # Original prototype (SFT/CoT approach)
-│   └── route-to-luxon/                     # 🟢 Active — SFT routing experiments
-│       ├── reports/                        # Experiment post-mortems & analysis
-│       ├── runs/                           # Colab notebook exports
-│       └── weights/                        # Model checkpoints (gitignored)
+│   ├── route-to-luxon/                     # SFT routing experiments
+│   │   ├── reports/                        # Experiment post-mortems & analysis
+│   │   ├── runs/                           # Colab notebook exports
+│   │   └── weights/                        # Model checkpoints (gitignored)
+│   └── neural-compute/                     # 🟢 Active — RISC ALU experiments
+│       ├── train_phase_zero.py             # Phase Zero proof (3 stages)
+│       └── train_multi_program.py          # Multi-program dispatch proof
 ├── tests/                                  # Test suites
-│   └── test_domain_tokenizer.py            # 25 tests (detector + compiler)
+│   ├── test_domain_tokenizer.py            # 25 tests (detector + compiler)
+│   ├── test_circuit_gates.py               # 28 tests (Phase Zero circuits)
+│   └── test_alu_programs.py                # 941 tests (ALU + programs)
 ├── brain/                                  # Project documentation
 │   ├── decisions/                          # Architectural Decision Records
-│   │   └── 001-route-to-luxon.md           # Option B architecture decision
+│   │   ├── 001-route-to-luxon.md           # Option B architecture
+│   │   ├── 002-neural-compute-layer.md     # Phase Zero: circuits as modules
+│   │   └── 003-risc-alu.md                 # RISC ALU: 5-primitive architecture
 │   ├── implementation_plan.md              # Current pipeline plan
 │   └── task.md                             # Task tracking
 ├── common-docs/                            # Contribution guides
@@ -134,9 +147,9 @@ python tools/validate.py --model_id google/gemma-2-2b-it \
 
 ## Original Experiment: Tagzeit
 
-The [Tagzeit experiment](./experiments/temporal-tagzeit/) was the founding prototype, using a `[THINK]` chain-of-thought approach with SmolLM-135M. It demonstrated that small models can learn temporal formatting but struggle with the underlying arithmetic — motivating the architectural shift to Route-to-Luxon.
+The [Tagzeit experiment](./experiments/temporal-tagzeit/) was the founding prototype, using a `[THINK]` chain-of-thought approach with SmolLM-135M (135M params) and Gemma-2B. It demonstrated that models at this scale learn scratchpad format (65% tight structural match) but fail to produce correct, parseable final answers (0% normalised match) — motivating the architectural shift to Route-to-Luxon.
 
-See the [Tagzeit README](./experiments/temporal-tagzeit/README.md) for the original experiment documentation.
+See the [Tagzeit README](./experiments/temporal-tagzeit/README.md) for the full experiment documentation, metric definitions, and limitations.
 
 ## Contributing
 

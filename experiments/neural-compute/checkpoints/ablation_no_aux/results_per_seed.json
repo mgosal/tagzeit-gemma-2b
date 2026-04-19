@@ -1,0 +1,87 @@
+[
+  {
+    "seed": 42,
+    "ablation": "no_aux_operand_loss",
+    "e2e_accuracy": 0.19333332777023315,
+    "oracle_accuracy": 0.19499999284744263,
+    "router_accuracy": 0.9350000023841858,
+    "per_program_e2e": {
+      "IntAdd": 0.0,
+      "Mod": 0.08500000089406967,
+      "Greater": 0.4950000047683716
+    },
+    "n_e2e_correct": 116,
+    "n_total": 600,
+    "epochs_run": 20000,
+    "elapsed": 26.9,
+    "n_params": 29865
+  },
+  {
+    "seed": 123,
+    "ablation": "no_aux_operand_loss",
+    "e2e_accuracy": 0.20000000298023224,
+    "oracle_accuracy": 0.2016666680574417,
+    "router_accuracy": 0.9383333325386047,
+    "per_program_e2e": {
+      "IntAdd": 0.0,
+      "Mod": 0.029999999329447746,
+      "Greater": 0.5699999928474426
+    },
+    "n_e2e_correct": 120,
+    "n_total": 600,
+    "epochs_run": 20000,
+    "elapsed": 26.69,
+    "n_params": 29865
+  },
+  {
+    "seed": 7,
+    "ablation": "no_aux_operand_loss",
+    "e2e_accuracy": 0.18166667222976685,
+    "oracle_accuracy": 0.18666666746139526,
+    "router_accuracy": 0.949999988079071,
+    "per_program_e2e": {
+      "IntAdd": 0.0,
+      "Mod": 0.08500000089406967,
+      "Greater": 0.46000000834465027
+    },
+    "n_e2e_correct": 109,
+    "n_total": 600,
+    "epochs_run": 20000,
+    "elapsed": 27.12,
+    "n_params": 29865
+  },
+  {
+    "seed": 2024,
+    "ablation": "no_aux_operand_loss",
+    "e2e_accuracy": 0.22333332896232605,
+    "oracle_accuracy": 0.22333332896232605,
+    "router_accuracy": 0.9350000023841858,
+    "per_program_e2e": {
+      "IntAdd": 0.0,
+      "Mod": 0.07500000298023224,
+      "Greater": 0.5950000286102295
+    },
+    "n_e2e_correct": 134,
+    "n_total": 600,
+    "epochs_run": 20000,
+    "elapsed": 27.28,
+    "n_params": 29865
+  },
+  {
+    "seed": 31415,
+    "ablation": "no_aux_operand_loss",
+    "e2e_accuracy": 0.09833333641290665,
+    "oracle_accuracy": 0.10166666656732559,
+    "router_accuracy": 0.9583333134651184,
+    "per_program_e2e": {
+      "IntAdd": 0.004999999888241291,
+      "Mod": 0.05999999865889549,
+      "Greater": 0.23000000417232513
+    },
+    "n_e2e_correct": 59,
+    "n_total": 600,
+    "epochs_run": 20000,
+    "elapsed": 27.39,
+    "n_params": 29865
+  }
+]

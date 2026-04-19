@@ -1,0 +1,29 @@
+{
+  "n_seeds": 5,
+  "seeds": [
+    42,
+    123,
+    7,
+    2024,
+    31415
+  ],
+  "e2e_accuracy_mean": 0.9263333439826965,
+  "e2e_accuracy_std": 0.012156376759304961,
+  "oracle_accuracy_mean": 0.993666672706604,
+  "oracle_accuracy_std": 0.009159079041235951,
+  "router_accuracy_mean": 0.9320000052452088,
+  "router_accuracy_std": 0.004149962574946414,
+  "per_program_e2e_mean": {
+    "IntAdd": 0.9050000071525574,
+    "Mod": 0.9870000004768371,
+    "Greater": 0.8870000004768371
+  },
+  "per_program_e2e_std": {
+    "IntAdd": 0.020615533766036042,
+    "Mod": 0.029068882641256965,
+    "Greater": 0.023075957592314105
+  },
+  "n_params": 29865,
+  "n_total": 600,
+  "epochs_max": 20000
+}

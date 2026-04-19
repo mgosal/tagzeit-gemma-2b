@@ -1,0 +1,1062 @@
+{
+  "stage": "C",
+  "model_class": "StageCModel",
+  "final_accuracy": 1.0,
+  "best_accuracy": 1.0,
+  "best_epoch": 9500,
+  "total_epochs": 9500,
+  "elapsed_seconds": 79.23,
+  "n_params": 72678,
+  "lr": 0.003,
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 32.4419,
+      "accuracy": 0.03,
+      "sum_accuracy": 0.1,
+      "carry_accuracy": 0.55
+    },
+    {
+      "epoch": 100,
+      "loss": 3.157,
+      "accuracy": 0.13,
+      "sum_accuracy": 0.2,
+      "carry_accuracy": 0.55
+    },
+    {
+      "epoch": 500,
+      "loss": 1.9802,
+      "accuracy": 0.33,
+      "sum_accuracy": 0.34,
+      "carry_accuracy": 0.96
+    },
+    {
+      "epoch": 1000,
+      "loss": 1.6636,
+      "accuracy": 0.27,
+      "sum_accuracy": 0.28,
+      "carry_accuracy": 0.99
+    },
+    {
+      "epoch": 1500,
+      "loss": 1.4804,
+      "accuracy": 0.28,
+      "sum_accuracy": 0.28,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 2000,
+      "loss": 1.3525,
+      "accuracy": 0.4,
+      "sum_accuracy": 0.4,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 2500,
+      "loss": 1.2539,
+      "accuracy": 0.44,
+      "sum_accuracy": 0.44,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 3000,
+      "loss": 1.1732,
+      "accuracy": 0.63,
+      "sum_accuracy": 0.63,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 3500,
+      "loss": 1.1042,
+      "accuracy": 0.77,
+      "sum_accuracy": 0.77,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 4000,
+      "loss": 1.0436,
+      "accuracy": 0.79,
+      "sum_accuracy": 0.79,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 4500,
+      "loss": 0.9897,
+      "accuracy": 0.79,
+      "sum_accuracy": 0.79,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 5000,
+      "loss": 0.9489,
+      "accuracy": 0.79,
+      "sum_accuracy": 0.79,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 5500,
+      "loss": 0.8951,
+      "accuracy": 0.82,
+      "sum_accuracy": 0.82,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 6000,
+      "loss": 0.8536,
+      "accuracy": 0.9,
+      "sum_accuracy": 0.9,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 6500,
+      "loss": 0.8153,
+      "accuracy": 0.9,
+      "sum_accuracy": 0.9,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 7000,
+      "loss": 0.78,
+      "accuracy": 0.9,
+      "sum_accuracy": 0.9,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 7500,
+      "loss": 0.7469,
+      "accuracy": 0.9,
+      "sum_accuracy": 0.9,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 8000,
+      "loss": 0.7176,
+      "accuracy": 0.9,
+      "sum_accuracy": 0.9,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 8500,
+      "loss": 0.6877,
+      "accuracy": 0.91,
+      "sum_accuracy": 0.91,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 9000,
+      "loss": 0.6611,
+      "accuracy": 0.91,
+      "sum_accuracy": 0.91,
+      "carry_accuracy": 1.0
+    },
+    {
+      "epoch": 9500,
+      "loss": 0.636,
+      "accuracy": 1.0,
+      "sum_accuracy": 1.0,
+      "carry_accuracy": 1.0
+    }
+  ],
+  "detailed_results": [
+    {
+      "a": 0,
+      "b": 0,
+      "expected_sum": 0,
+      "expected_carry": 0,
+      "pred_sum": 0,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "expected_sum": 1,
+      "expected_carry": 0,
+      "pred_sum": 1,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "expected_sum": 2,
+      "expected_carry": 0,
+      "pred_sum": 2,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "expected_sum": 3,
+      "expected_carry": 0,
+      "pred_sum": 3,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 4,
+      "expected_sum": 4,
+      "expected_carry": 0,
+      "pred_sum": 4,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 5,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 6,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 7,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 8,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 0,
+      "b": 9,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 0,
+      "expected_sum": 1,
+      "expected_carry": 0,
+      "pred_sum": 1,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "expected_sum": 2,
+      "expected_carry": 0,
+      "pred_sum": 2,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "expected_sum": 3,
+      "expected_carry": 0,
+      "pred_sum": 3,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "expected_sum": 4,
+      "expected_carry": 0,
+      "pred_sum": 4,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 4,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 5,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 6,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 7,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 8,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 1,
+      "b": 9,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 0,
+      "expected_sum": 2,
+      "expected_carry": 0,
+      "pred_sum": 2,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 1,
+      "expected_sum": 3,
+      "expected_carry": 0,
+      "pred_sum": 3,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 2,
+      "expected_sum": 4,
+      "expected_carry": 0,
+      "pred_sum": 4,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 4,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 5,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 6,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 7,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 8,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 2,
+      "b": 9,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 0,
+      "expected_sum": 3,
+      "expected_carry": 0,
+      "pred_sum": 3,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 1,
+      "expected_sum": 4,
+      "expected_carry": 0,
+      "pred_sum": 4,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 2,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 3,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 4,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 6,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 7,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 8,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 3,
+      "b": 9,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 0,
+      "expected_sum": 4,
+      "expected_carry": 0,
+      "pred_sum": 4,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 1,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 2,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 3,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 4,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 5,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 6,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 7,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 8,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 4,
+      "b": 9,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 0,
+      "expected_sum": 5,
+      "expected_carry": 0,
+      "pred_sum": 5,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 1,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 2,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 3,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 4,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 5,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 6,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 7,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 8,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 5,
+      "b": 9,
+      "expected_sum": 4,
+      "expected_carry": 1,
+      "pred_sum": 4,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 0,
+      "expected_sum": 6,
+      "expected_carry": 0,
+      "pred_sum": 6,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 1,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 2,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 3,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 4,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 5,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 6,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 7,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 8,
+      "expected_sum": 4,
+      "expected_carry": 1,
+      "pred_sum": 4,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 6,
+      "b": 9,
+      "expected_sum": 5,
+      "expected_carry": 1,
+      "pred_sum": 5,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 0,
+      "expected_sum": 7,
+      "expected_carry": 0,
+      "pred_sum": 7,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 1,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 2,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 3,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 4,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 5,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 6,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 7,
+      "expected_sum": 4,
+      "expected_carry": 1,
+      "pred_sum": 4,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 8,
+      "expected_sum": 5,
+      "expected_carry": 1,
+      "pred_sum": 5,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 7,
+      "b": 9,
+      "expected_sum": 6,
+      "expected_carry": 1,
+      "pred_sum": 6,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 0,
+      "expected_sum": 8,
+      "expected_carry": 0,
+      "pred_sum": 8,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 1,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 2,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 3,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 4,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 5,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 6,
+      "expected_sum": 4,
+      "expected_carry": 1,
+      "pred_sum": 4,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 7,
+      "expected_sum": 5,
+      "expected_carry": 1,
+      "pred_sum": 5,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 8,
+      "expected_sum": 6,
+      "expected_carry": 1,
+      "pred_sum": 6,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 8,
+      "b": 9,
+      "expected_sum": 7,
+      "expected_carry": 1,
+      "pred_sum": 7,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 0,
+      "expected_sum": 9,
+      "expected_carry": 0,
+      "pred_sum": 9,
+      "pred_carry": 0,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 1,
+      "expected_sum": 0,
+      "expected_carry": 1,
+      "pred_sum": 0,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 2,
+      "expected_sum": 1,
+      "expected_carry": 1,
+      "pred_sum": 1,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 3,
+      "expected_sum": 2,
+      "expected_carry": 1,
+      "pred_sum": 2,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 4,
+      "expected_sum": 3,
+      "expected_carry": 1,
+      "pred_sum": 3,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 5,
+      "expected_sum": 4,
+      "expected_carry": 1,
+      "pred_sum": 4,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 6,
+      "expected_sum": 5,
+      "expected_carry": 1,
+      "pred_sum": 5,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 7,
+      "expected_sum": 6,
+      "expected_carry": 1,
+      "pred_sum": 6,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 8,
+      "expected_sum": 7,
+      "expected_carry": 1,
+      "pred_sum": 7,
+      "pred_carry": 1,
+      "correct": true
+    },
+    {
+      "a": 9,
+      "b": 9,
+      "expected_sum": 8,
+      "expected_carry": 1,
+      "pred_sum": 8,
+      "pred_carry": 1,
+      "correct": true
+    }
+  ]
+}

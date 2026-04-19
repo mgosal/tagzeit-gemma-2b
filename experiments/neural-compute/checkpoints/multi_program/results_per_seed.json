@@ -1,0 +1,122 @@
+[
+  {
+    "seed": 42,
+    "e2e_accuracy": 0.9300000071525574,
+    "oracle_accuracy": 1.0,
+    "router_accuracy": 0.9283333420753479,
+    "per_program_e2e": {
+      "IntAdd": 0.9200000166893005,
+      "Mod": 1.0,
+      "Greater": 0.8700000047683716
+    },
+    "per_program_oracle": {
+      "IntAdd": 1.0,
+      "Mod": 1.0,
+      "Greater": 1.0
+    },
+    "n_e2e_correct": 558,
+    "n_oracle_correct": 600,
+    "n_total": 600,
+    "converged_at": null,
+    "epochs_run": 20000,
+    "elapsed": 45.45,
+    "n_params": 29865,
+    "e2e_failures": []
+  },
+  {
+    "seed": 123,
+    "e2e_accuracy": 0.9366666674613953,
+    "oracle_accuracy": 1.0,
+    "router_accuracy": 0.9350000023841858,
+    "per_program_e2e": {
+      "IntAdd": 0.9049999713897705,
+      "Mod": 1.0,
+      "Greater": 0.9049999713897705
+    },
+    "per_program_oracle": {
+      "IntAdd": 1.0,
+      "Mod": 1.0,
+      "Greater": 1.0
+    },
+    "n_e2e_correct": 562,
+    "n_oracle_correct": 600,
+    "n_total": 600,
+    "converged_at": null,
+    "epochs_run": 20000,
+    "elapsed": 44.94,
+    "n_params": 29865,
+    "e2e_failures": []
+  },
+  {
+    "seed": 7,
+    "e2e_accuracy": 0.9233333468437195,
+    "oracle_accuracy": 0.9883333444595337,
+    "router_accuracy": 0.9350000023841858,
+    "per_program_e2e": {
+      "IntAdd": 0.9100000262260437,
+      "Mod": 1.0,
+      "Greater": 0.8600000143051147
+    },
+    "per_program_oracle": {
+      "IntAdd": 0.9649999737739563,
+      "Mod": 1.0,
+      "Greater": 1.0
+    },
+    "n_e2e_correct": 554,
+    "n_oracle_correct": 593,
+    "n_total": 600,
+    "converged_at": null,
+    "epochs_run": 20000,
+    "elapsed": 45.51,
+    "n_params": 29865,
+    "e2e_failures": []
+  },
+  {
+    "seed": 2024,
+    "e2e_accuracy": 0.9066666960716248,
+    "oracle_accuracy": 0.9800000190734863,
+    "router_accuracy": 0.9266666769981384,
+    "per_program_e2e": {
+      "IntAdd": 0.8700000047683716,
+      "Mod": 0.9350000023841858,
+      "Greater": 0.9150000214576721
+    },
+    "per_program_oracle": {
+      "IntAdd": 1.0,
+      "Mod": 0.9399999976158142,
+      "Greater": 1.0
+    },
+    "n_e2e_correct": 544,
+    "n_oracle_correct": 588,
+    "n_total": 600,
+    "converged_at": null,
+    "epochs_run": 20000,
+    "elapsed": 44.81,
+    "n_params": 29865,
+    "e2e_failures": []
+  },
+  {
+    "seed": 31415,
+    "e2e_accuracy": 0.9350000023841858,
+    "oracle_accuracy": 1.0,
+    "router_accuracy": 0.9350000023841858,
+    "per_program_e2e": {
+      "IntAdd": 0.9200000166893005,
+      "Mod": 1.0,
+      "Greater": 0.8849999904632568
+    },
+    "per_program_oracle": {
+      "IntAdd": 1.0,
+      "Mod": 1.0,
+      "Greater": 1.0
+    },
+    "n_e2e_correct": 561,
+    "n_oracle_correct": 600,
+    "n_total": 600,
+    "converged_at": null,
+    "epochs_run": 20000,
+    "elapsed": 44.81,
+    "n_params": 29865,
+    "e2e_failures": []
+  }
+]

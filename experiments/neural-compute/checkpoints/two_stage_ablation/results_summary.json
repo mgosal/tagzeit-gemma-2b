@@ -1,0 +1,52 @@
+[
+  {
+    "label": "baseline (joint from epoch 0)",
+    "router_epochs": 0,
+    "joint_epochs": 20000,
+    "aux_weight": 1.0,
+    "e2e_mean": 0.9263333439826965,
+    "e2e_std": 0.012156376759304961,
+    "oracle_mean": 0.993666672706604,
+    "router_mean": 0.9320000052452088
+  },
+  {
+    "label": "two-stage: 5K router \u2192 15K joint",
+    "router_epochs": 5000,
+    "joint_epochs": 15000,
+    "aux_weight": 1.0,
+    "e2e_mean": 0.9116666674613952,
+    "e2e_std": 0.06507473395769581,
+    "oracle_mean": 0.9756666660308838,
+    "router_mean": 0.9350000023841858
+  },
+  {
+    "label": "two-stage: 10K router \u2192 10K joint",
+    "router_epochs": 10000,
+    "joint_epochs": 10000,
+    "aux_weight": 1.0,
+    "e2e_mean": 0.9370000004768372,
+    "e2e_std": 0.0131972093440345,
+    "oracle_mean": 1.0,
+    "router_mean": 0.9363333344459533
+  },
+  {
+    "label": "joint, aux_weight=0.5",
+    "router_epochs": 0,
+    "joint_epochs": 20000,
+    "aux_weight": 0.5,
+    "e2e_mean": 0.9226666688919067,
+    "e2e_std": 0.0232319212792783,
+    "oracle_mean": 0.9963333368301391,
+    "router_mean": 0.9253333330154419
+  },
+  {
+    "label": "joint, aux_weight=2.0",
+    "router_epochs": 0,
+    "joint_epochs": 20000,
+    "aux_weight": 2.0,
+    "e2e_mean": 0.9293333411216735,
+    "e2e_std": 0.006519196188006751,
+    "oracle_mean": 1.0,
+    "router_mean": 0.9286666750907898
+  }
+]
