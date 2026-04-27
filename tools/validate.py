@@ -18,6 +18,7 @@ import re
 import time
 import json
 import argparse
+import math
 
 # ---------------------------------------------------------------------------
 # Test Cases: Each has an "id", the core question parts, and the expected answer.
@@ -168,6 +169,73 @@ def build_prompt(test_case, skin="military", mode="direct"):
 
 
 # ---------------------------------------------------------------------------
+# Wilson Score Confidence Interval
+# ---------------------------------------------------------------------------
+def wilson_ci(k, n, z=1.96):
+    """Wilson score interval for a binomial proportion.
+    Returns (lower, upper) as percentages.
+    z=1.96 gives 95% CI.
+    """
+    if n == 0:
+        return (0.0, 0.0)
+    p_hat = k / n
+    denom = 1 + z**2 / n
+    centre = (p_hat + z**2 / (2 * n)) / denom
+    spread = z / denom * math.sqrt(p_hat * (1 - p_hat) / n + z**2 / (4 * n**2))
+    lo = max(0.0, centre - spread)
+    hi = min(1.0, centre + spread)
+    return (round(lo * 100, 1), round(hi * 100, 1))
+
+
+def format_pct_with_ci(k, n):
+    """Format a percentage with its 95% Wilson CI, e.g. '2.3% [0.4–11.8%]'."""
+    if n == 0:
+        return "N/A"
+    pct = round(100 * k / n, 1)
+    lo, hi = wilson_ci(k, n)
+    return f"{pct}% [{lo}–{hi}%]"
+
+
+# ---------------------------------------------------------------------------
+# Structural Match Predicates
+# ---------------------------------------------------------------------------
+# Loose: any 2 scratchpad elements (including delimiters)
+STRUCTURAL_PATTERN = re.compile(
+    r'\d+\+\d+=\d+'
+    r'|mod60=\d+'
+    r'|carry=\d+'
+    r'|H:\d+\+\d+=\d+'
+    r'|\[THINK\]'
+    r'|\[RESULT\]'
+    r'|\[ANSWER\]'
+)
+
+# Tight: requires arithmetic substance, not just delimiters
+_PATTERN_ADD = re.compile(r'\d+\+\d+=\d+')
+_PATTERN_MOD_CARRY_HOUR = re.compile(r'mod60=\d+|carry=\d+|H:\d+\+\d+=\d+')
+
+
+def is_structural_match(raw_output):
+    """Returns True if the output contains ≥2 recognisable scratchpad elements.
+    This is the LOOSE predicate — any 2 elements including delimiters.
+    """
+    matches = STRUCTURAL_PATTERN.findall(raw_output)
+    return len(matches) >= 2
+
+
+def is_structural_match_tight(raw_output):
+    """Returns True if the output contains arithmetic substance:
+    at least one addition pattern (D+D=D) AND at least one
+    mod60/carry/hour-computation pattern.
+
+    This is the TIGHT predicate — delimiter-only outputs do not qualify.
+    """
+    has_add = bool(_PATTERN_ADD.search(raw_output))
+    has_mod_carry_hour = bool(_PATTERN_MOD_CARRY_HOUR.search(raw_output))
+    return has_add and has_mod_carry_hour
+
+
+# ---------------------------------------------------------------------------
 # Time Normalizer (Two-Tier Scoring)
 # ---------------------------------------------------------------------------
 def normalize_time(raw_output):
@@ -200,6 +268,54 @@ def normalize_time(raw_output):
         return "INVALID"
 
     return raw_output.strip()
+
+
+def normalize_time_oracle(raw_output):
+    """Oracle parse: extract the computed time from arithmetic scratchpad traces.
+
+    Looks for patterns like:
+      - 'mod60=03 carry=1 H:9+1=10'     → 10:03
+      - 'mod60=15 carry=1 H:23+1=24 mod24=00' → 00:15
+      - 'H:12+1=13' with 'mod60=05'     → 13:05
+
+    Falls back to normalize_time() if no scratchpad pattern is found.
+    """
+    # Extract minute result: mod60=MM
+    min_match = re.search(r'mod60=(\d{1,2})', raw_output)
+    # Extract hour result: H:X+Y=Z (take last occurrence)
+    hour_matches = re.findall(r'H:(\d{1,2})\+(\d+)=(\d{1,2})', raw_output)
+    # Also look for mod24=HH
+    hour_mod24 = re.search(r'mod24=(\d{1,2})', raw_output)
+
+    if min_match and (hour_matches or hour_mod24):
+        minutes = int(min_match.group(1))
+
+        if hour_mod24:
+            hours = int(hour_mod24.group(1))
+        elif hour_matches:
+            # Take the last H:X+Y=Z result
+            hours = int(hour_matches[-1][2])
+        else:
+            hours = 0
+
+        # Apply mod24 if hours >= 24
+        hours = hours % 24
+
+        if 0 <= hours <= 23 and 0 <= minutes <= 59:
+            return f"{hours:02d}:{minutes:02d}"
+
+    # Fallback: simple pattern where minute sum doesn't need mod60
+    # e.g., "30+15=45 H:20" (no carry needed)
+    if hour_matches and not min_match:
+        sum_match = re.search(r'(\d{1,2})\+(\d+)=(\d{1,3})\s+H:', raw_output)
+        if sum_match:
+            minutes = int(sum_match.group(3))
+            hours = int(hour_matches[-1][2])
+            if 0 <= hours <= 23 and 0 <= minutes <= 59:
+                return f"{hours:02d}:{minutes:02d}"
+
+    # No scratchpad detected — fall back to standard normalizer
+    return normalize_time(raw_output)
 
 
 # ---------------------------------------------------------------------------
@@ -411,6 +527,9 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
     results = []
     total_exact = 0
     total_normalized = 0
+    total_oracle = 0
+    total_structural = 0
+    total_structural_tight = 0
     total_tests = 0
     failure_counts = {"BASE_10_ERROR": 0, "TOKEN_COLLAPSE": 0, "FORMAT_HALLUCINATION": 0, "OTHER_ERROR": 0}
     tps_samples = []
@@ -438,10 +557,14 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
             tps_samples.append(tps)
 
             normalized = normalize_time(raw_response)
+            oracle_normalized = normalize_time_oracle(raw_response)
+            structural = is_structural_match(raw_response)
+            structural_tight = is_structural_match_tight(raw_response)
             expected = tc["expected"]
 
             exact_match = (raw_response.strip() == expected)
             norm_match = (normalized == expected)
+            oracle_match = (oracle_normalized == expected)
             failure_tag = classify_failure(expected, normalized, raw_response)
 
             total_tests += 1
@@ -449,15 +572,23 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
                 total_exact += 1
             if norm_match:
                 total_normalized += 1
+            if oracle_match:
+                total_oracle += 1
+            if structural:
+                total_structural += 1
+            if structural_tight:
+                total_structural_tight += 1
             if failure_tag != "PASS" and failure_tag in failure_counts:
                 failure_counts[failure_tag] += 1
 
             cat = tc["category"]
             if cat not in category_scores:
-                category_scores[cat] = {"total": 0, "correct": 0}
+                category_scores[cat] = {"total": 0, "correct": 0, "oracle_correct": 0}
             category_scores[cat]["total"] += 1
             if norm_match:
                 category_scores[cat]["correct"] += 1
+            if oracle_match:
+                category_scores[cat]["oracle_correct"] += 1
 
             result = {
                 "id": tc["id"],
@@ -467,15 +598,20 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
                 "expected": expected,
                 "raw_response": raw_response.strip()[:200],
                 "normalized": normalized,
+                "oracle_normalized": oracle_normalized,
+                "structural_match": structural,
+                "structural_match_tight": structural_tight,
                 "exact_match": exact_match,
                 "norm_match": norm_match,
+                "oracle_match": oracle_match,
                 "failure_tag": failure_tag,
                 "tokens_per_second": round(tps, 1),
             }
             results.append(result)
 
             status = "✓" if norm_match else f"✗ [{failure_tag}]"
-            print(f"  {tc['id']:6s} [{skin:8s}] {status:25s} expected={expected:6s} got={normalized:6s}")
+            oracle_flag = " (oracle ✓)" if oracle_match and not norm_match else ""
+            print(f"  {tc['id']:6s} [{skin:8s}] {status:25s} expected={expected:6s} got={normalized:6s}{oracle_flag}")
 
     # Summary
     avg_tps = sum(tps_samples) / len(tps_samples) if tps_samples else 0
@@ -483,8 +619,11 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
     print(f"RESULTS ({mode.upper()} mode)")
     print(f"{'='*60}")
     print(f"  Total Tests:      {total_tests}")
-    print(f"  Exact Match:      {total_exact}/{total_tests} ({100*total_exact/total_tests:.1f}%)")
-    print(f"  Normalized Match: {total_normalized}/{total_tests} ({100*total_normalized/total_tests:.1f}%)")
+    print(f"  Exact Match:      {total_exact}/{total_tests} {format_pct_with_ci(total_exact, total_tests)}")
+    print(f"  Normalized Match: {total_normalized}/{total_tests} {format_pct_with_ci(total_normalized, total_tests)}")
+    print(f"  Oracle Match:     {total_oracle}/{total_tests} {format_pct_with_ci(total_oracle, total_tests)}")
+    print(f"  Structural Match (loose):  {total_structural}/{total_tests} {format_pct_with_ci(total_structural, total_tests)}")
+    print(f"  Structural Match (tight):  {total_structural_tight}/{total_tests} {format_pct_with_ci(total_structural_tight, total_tests)}")
     print(f"  Avg tok/s:        {avg_tps:.1f}")
     print(f"\n  Failure Modes:")
     for tag, count in failure_counts.items():
@@ -492,18 +631,31 @@ def run_validation(model, tokenizer, engine, test_cases, mode="direct", skins=No
     print(f"\n  Category Breakdown:")
     for cat, scores in sorted(category_scores.items()):
         pct = 100 * scores["correct"] / scores["total"] if scores["total"] > 0 else 0
-        print(f"    {cat:20s}: {scores['correct']}/{scores['total']} ({pct:.0f}%)")
+        oracle_pct = 100 * scores["oracle_correct"] / scores["total"] if scores["total"] > 0 else 0
+        oracle_str = f" (oracle: {oracle_pct:.0f}%)" if scores["oracle_correct"] != scores["correct"] else ""
+        print(f"    {cat:20s}: {scores['correct']}/{scores['total']} ({pct:.0f}%){oracle_str}")
 
     return {
         "mode": mode,
         "total_tests": total_tests,
         "exact_match": total_exact,
         "normalized_match": total_normalized,
+        "oracle_match": total_oracle,
+        "structural_match": total_structural,
         "exact_pct": round(100 * total_exact / total_tests, 1) if total_tests else 0,
         "norm_pct": round(100 * total_normalized / total_tests, 1) if total_tests else 0,
+        "oracle_pct": round(100 * total_oracle / total_tests, 1) if total_tests else 0,
+        "structural_pct": round(100 * total_structural / total_tests, 1) if total_tests else 0,
+        "structural_tight": total_structural_tight,
+        "structural_tight_pct": round(100 * total_structural_tight / total_tests, 1) if total_tests else 0,
+        "exact_ci": wilson_ci(total_exact, total_tests),
+        "norm_ci": wilson_ci(total_normalized, total_tests),
+        "oracle_ci": wilson_ci(total_oracle, total_tests),
+        "structural_ci": wilson_ci(total_structural, total_tests),
+        "structural_tight_ci": wilson_ci(total_structural_tight, total_tests),
         "avg_tps": round(avg_tps, 1),
         "failure_counts": failure_counts,
-        "category_scores": {k: {**v, "pct": round(100*v["correct"]/v["total"], 1) if v["total"] else 0} for k,v in category_scores.items()},
+        "category_scores": {k: {**v, "pct": round(100*v["correct"]/v["total"], 1) if v["total"] else 0, "oracle_pct": round(100*v["oracle_correct"]/v["total"], 1) if v["total"] else 0} for k,v in category_scores.items()},
         "details": results,
     }
 
